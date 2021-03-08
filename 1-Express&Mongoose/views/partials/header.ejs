@@ -35,22 +35,23 @@
             <div class="collapse navbar-collapse d-lg-flex flex-lg-row-reverse me-3" id="navbarNav">
                 <ul class="navbar-nav d-lg-flex- flex-lg-row-reverse">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/">خانه</a>
+                        <a class="nav-link <%if(page === "home"){%> active <%}%>" aria-current="page" href="/">خانه</a>
                         <span class="bi bi-house-fill d-inline-block"></span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/contact">تماس با ما</a>
+                        <a class="nav-link <%if(page === "contact"){%> active <%}%>" href="/contact">تماس با ما</a>
                         <span class="bi bi-person-circle d-inline-block"></span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/about">درباره ما</a>
+                        <a class="nav-link <%if(page === "about"){%> active <%}%>" href="/about">درباره ما</a>
                         <span class="bi bi-info-circle-fill d-inline-block "></span>
                     </li>
                 </ul>
 
                 <!-- search bar -->
                 <div class="search-bar w-50 mx-auto">
-                    <input class="text-end  w-100 border-0  shadow py-2" type="search" placeholder="با کلید / شروع به سرچ کنید " aria-label="Search">
+                    <input class="text-end  w-100 border-0  shadow py-2" type="search"
+                        placeholder="با کلید / شروع به سرچ کنید " aria-label="Search">
                 </div>
             </div>
         </div>

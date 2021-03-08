@@ -5,57 +5,10 @@
             &plus;</div>
         <main class="row gx-sm-3 gx-md-5">
             <% companies.forEach(company=> {%>
-                <div class="col-12 col-md-6 col-lg-4 d-flex justify-content-center mb-5">
-                    <div class="card w-100">
-                        <div class="card-body">
-                            <span card-id=<%=company._id %> role="delete-card" id="delete-button" class="
-                                rounded-circle">X</span>
-                            <h5 class="card-title text-center">
-                                <%= company.name %>
-                            </h5>
-                            <p class="card-text">
-                                CIN: <strong>
-                                    <%= company.cin %>
-                                </strong>
-                                City: <strong>
-                                    <%= company.city %>
-                                </Strong>
-                            </p>
-                            <p class="card-text"> Province: <strong>
-                                    <%= company.province %>
-                            </p>
-                            </Strong>
-                            Telephone: <strong>
-                                <%= company.telephone %>
-                            </Strong>
-
-                            <a card-id=<%=company._id %> class="btn-more btn btn-dark mt-3 ms-auto"
-                                data-bs-toggle="modal"
-                                data-bs-target="#more-info-modal">More</a>
-                        </div>
-                    </div>
-                </div>
-                <% }) %>
-                    <!-- modal -->
-                    <div class="modal fade" id="more-info-modal" tabindex="-1" aria-labelledby="moreInfoModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content shadow-lg">
-                                <div class="modal-header ">
-                                    <h5 class="modal-title text-capitalize" id="exampleModalLabel">informations of
-                                        company </h5>
-                                    <button type="button" class="btn btn-lg text-white fs-5 " data-bs-dismiss="modal"
-                                        aria-label="Close">X</button>
-                                </div>
-                                <div class="modal-body">
-                                    ...
-                                </div>
-                                <div class="modal-footer">
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+              <%- include("./partials/card", {company}) %>   
+            <% }) %>
+        <!-- modal -->
+        <%- include("./partials/modal") %>             
         </main>
     </div>
 
