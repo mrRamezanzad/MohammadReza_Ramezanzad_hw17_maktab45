@@ -104,11 +104,22 @@ router.post("/company/create", (req, res) => {
 
 // ================= read
 router.get("/company/getAll", (req, res) => {
-  let exclude = req.query.exc && {
 
-  }
+  let selectedRegister = new Date()
+  selectedRegister.setFullYear(selectedRegister.getFullYear() - req.query.lt)
+  let match = {
+      ...(req.query.lt) && {
+        registerDate: {
+          $gte: selectedRegister
+        },
+      },
+      ...(req.query.id) && {
+        _id: req.query.id
+      }
+    },
+    filter = req.query.exc && {}
 
-  Company.read({}, exclude, (err, companies) => {
+  Company.read(match, filter, (err, companies) => {
     if (companies) {
       res.json(companies)
     } else {
@@ -134,10 +145,10 @@ router.get("/company/get/q=", (req, res) => {
         _id: req.query.id
       }
     },
-    exclude = req.query.exc && {}
+    filter = req.query.exc && {}
   // console.log(match);
 
-  Company.read(match, exclude, (err, company) => {
+  Company.read(match, filter, (err, company) => {
     if (company) {
       res.json(company)
       // console.log(company);

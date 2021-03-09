@@ -37,13 +37,13 @@ module.exports = {
             })
         }
     },
-    read: (match, exclude, callback) => {
-        exclude = {
-            ...exclude,
+    read: (match, filter, callback) => {
+        filter = {
+            ...filter,
             _id: 1,
             __v: 0
         }
-        companyModel.find(match, exclude, (err, companies) => {
+        companyModel.find(match, filter, (err, companies) => {
             if (err) console.log(err);
             callback(err, companies);
         })

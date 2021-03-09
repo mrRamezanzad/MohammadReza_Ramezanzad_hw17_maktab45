@@ -9,13 +9,13 @@ const Company = require('../services/company')
 // Employee.dropCollection()
 
 // Employee.create([{
-//     firstName: "ali",
-//     lastName: "abbsi",
+//     firstName: "sami",
+//     lastName: "beigi",
 //     id: "1",
 //     gender: "male",
 //     manager: false,
 //     birthday: new Date("2010").toDateString(),
-//     company: "6047319e41cf7f2bb42b2793"
+//     company: "6047319e41cf7f2bb42b2790"
 // }, {
 //     firstName: "mitra",
 //     lastName: "vahidee",
@@ -23,7 +23,7 @@ const Company = require('../services/company')
 //     gender: "female",
 //     manager: true,
 //     birthday: new Date("1995").toDateString(),
-//     company: "6047319e41cf7f2bb42b2793"
+//     company: "6047319e41cf7f2bb42b2790"
 // }, {
 //     firstName: "masood",
 //     lastName: "rajabi",
@@ -32,6 +32,30 @@ const Company = require('../services/company')
 //     manager: false,
 //     birthday: new Date("1980").toDateString(),
 //     company: "6047319e41cf7f2bb42b2793"
+// },{
+//     firstName: "javad",
+//     lastName: "sameni",
+//     id: "4",
+//     gender: "male",
+//     manager: false,
+//     birthday: new Date("1980").toDateString(),
+//     company: "6047319e41cf7f2bb42b2791"
+// },{
+//     firstName: "zahra",
+//     lastName: "momeni",
+//     id: "5",
+//     gender: "male",
+//     manager: true,
+//     birthday: new Date("1980").toDateString(),
+//     company: "6047319e41cf7f2bb42b2791"
+// },{
+//     firstName: "saeed",
+//     lastName: "bahmani",
+//     id: "6",
+//     gender: "male",
+//     manager: false,
+//     birthday: new Date("1980").toDateString(),
+//     company: "6047319e41cf7f2bb42b278f"
 // }, ], (err, employees) => {
 //     console.log(employees);
 // })
@@ -154,21 +178,16 @@ router.get("/employee/getAll", (req, res) => {
             }
         }
 
-
     if (req.query.company) {
-        console.log(`================== user wants employees of ${req.query.company} ================`);
         Company.read({
             name: `${req.query.company}`
         }, {}, (err, targetCompany) => {
 
-            console.log("target company", targetCompany.length);
-            console.log("errrrrror", err);
             if (err) {
 
                 return res.json({
                     msg: "something went wrong in getting a companies employees"
                 })
-
             }
             if (targetCompany.length) {
 
@@ -190,7 +209,6 @@ router.get("/employee/getAll", (req, res) => {
                 })
             }
         })
-
     }
     // console.log(match);
     // console.log(filter.filter(el => el.trim()));
@@ -210,19 +228,82 @@ router.get("/employee/getAll", (req, res) => {
 })
 
 router.get("/employee/get", (req, res) => {
-    let filter = {}
-
-    Employee.read({
-        _id: req.query.id
-    }, filter, (employee) => {
-        if (employee) {
-            res.json(employee)
-        } else {
-            res.json({
-                msg: "something went wrong"
-            })
+    let currentYear = new Date().getFullYear(),
+        match = {
+            ...(req.query.id) && {
+                _id: req.query.id
+            },
+            ...(req.query.minAge && !req.query.maxAge) && {
+                birthday: {
+                    $lte: new Date(`${currentYear - req.query.minAge}`)
+                }
+            },
+            ...(req.query.maxAge && !req.query.minAge) && {
+                birthday: {
+                    $gte: new Date(`${currentYear - req.query.maxAge}`)
+                }
+            },
+            ...(req.query.minAge && req.query.maxAge) && {
+                birthday: {
+                    $lte: new Date(`${currentYear - req.query.minAge}`),
+                    $gte: new Date(`${currentYear - req.query.maxAge}`)
+                }
+            },
+            ...(req.query.manager) && {
+                manager: req.query.manager
+            }
+        },
+        exc = req.query.exc && req.query.exc.split(","),
+        filter = exc && {
+            ...(exc.includes("firstName") && {
+                firstName: 0
+            }),
+            ...(exc.includes("lastName")) && {
+                lastName: 0
+            },
+            ...(exc.includes("id")) && {
+                id: 0
+            },
+            ...(exc.includes("gender")) && {
+                gender: 0
+            },
+            ...(exc.includes("manager")) && {
+                manager: 0
+            },
+            ...(exc.includes("birthday")) && {
+                birthday: 0
+            }
         }
-    })
+
+    if (req.query.company) {
+        Company.read({
+            name: req.query.company
+        }, {}, (err, company) => {
+            match = {
+                ...match,
+                company: company[0]._id
+            }
+            Employee.read(match, filter, (err, employee) => {
+                if (employee) {
+                    res.json(employee)
+                } else {
+                    res.json({
+                        msg: "something went wrong"
+                    })
+                }
+            })
+        })
+    } else {
+        Employee.read(match, filter, (err, employee) => {
+            if (employee) {
+                res.json(employee)
+            } else {
+                res.json({
+                    msg: "something went wrong"
+                })
+            }
+        })
+    }
 })
 
 // ================= update 
@@ -254,7 +335,7 @@ router.put("/employee/update", (req, res) => {
 
     Employee.update({
         _id: req.query.id
-    }, employeeUpdateInfo, (employee) => {
+    }, employeeUpdateInfo, (err, employee) => {
         if (employee) {
             res.json(employee);
         } else {
@@ -267,11 +348,9 @@ router.put("/employee/update", (req, res) => {
 
 // =================== delete
 router.delete("/employee/delete", (req, res) => {
-
-    console.log(req.query.id);
     Employee.delete({
         _id: req.query.id
-    }, (response) => {
+    }, (err, response) => {
         if (response) {
             res.json(response)
         } else {
