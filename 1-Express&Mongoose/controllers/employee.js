@@ -15,7 +15,7 @@ const Company = require('../services/company')
 //     gender: "male",
 //     manager: false,
 //     birthday: new Date("2010").toDateString(),
-//     company_id: "6047319e41cf7f2bb42b2793"
+//     company: "6047319e41cf7f2bb42b2793"
 // }, {
 //     firstName: "mitra",
 //     lastName: "vahidee",
@@ -23,7 +23,7 @@ const Company = require('../services/company')
 //     gender: "female",
 //     manager: true,
 //     birthday: new Date("1995").toDateString(),
-//     company_id: "6047319e41cf7f2bb42b2793"
+//     company: "6047319e41cf7f2bb42b2793"
 // }, {
 //     firstName: "masood",
 //     lastName: "rajabi",
@@ -31,7 +31,7 @@ const Company = require('../services/company')
 //     gender: "male",
 //     manager: false,
 //     birthday: new Date("1980").toDateString(),
-//     company_id: "6047319e41cf7f2bb42b2793"
+//     company: "6047319e41cf7f2bb42b2793"
 // }, ], (err, employees) => {
 //     console.log(employees);
 // })
@@ -77,8 +77,8 @@ router.post("/employee/create", (req, res) => {
         ...(req.body.birthday) && {
             birthday: new Date(req.body.birthday)
         },
-        ...(req.body.company_id) && {
-            company_id: req.body.company_id
+        ...(req.body.company) && {
+            company: req.body.company
         }
     }
 
@@ -166,19 +166,19 @@ router.get("/employee/getAll", (req, res) => {
             if (err) {
 
                 return res.json({
-                    msg: "something went wrong"
+                    msg: "something went wrong in getting a companies employees"
                 })
 
             }
             if (targetCompany.length) {
 
                 Employee.read({
-                    company_id: targetCompany[0]._id
+                    company: targetCompany[0]._id
                 }, filter, (err, employees) => {
                     if (err) {
                         console.log(err);
                         return res.json({
-                            msg: "something went wrong"
+                            msg: "something went wrong "
                         })
                     }
                     console.log(employees);
@@ -196,12 +196,13 @@ router.get("/employee/getAll", (req, res) => {
     // console.log(filter.filter(el => el.trim()));
     // console.log(currentYear);
     else {
-        Employee.read(match, filter, (employees) => {
+        Employee.read(match, filter, (err, employees) => {
+            console.log("employeeeee", employees);
             if (employees) {
                 res.json(employees)
             } else {
                 res.json({
-                    msg: "something went wrong"
+                    msg: "something went wrong in getting all employees"
                 })
             }
         })

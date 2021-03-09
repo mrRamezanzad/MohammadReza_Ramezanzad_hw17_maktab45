@@ -19,7 +19,7 @@ module.exports = {
                     gender: employee.gender,
                     manager: employee.manager,
                     birthday: employee.birthday,
-                    company_id: employee.company_id
+                    company: employee.company
                 }).save((err, employee) => {
                     if (err) console.log(err.message)
                     callback(err, employee)
@@ -33,7 +33,7 @@ module.exports = {
                 gender: employee.gender,
                 manager: employee.manager,
                 birthday: employee.birthday,
-                company_id: employee.company_id
+                company: employee.company
             }).save((err, employee) => {
                 if (err) console.log(err.message)
                 // console.log(employee);

@@ -9,7 +9,7 @@ router.get('/', function (req, res) {
 
   let companies = Company.read({}, {
     _id: 0
-  }, (companies) => {
+  }, (err, companies) => {
     if (companies) {
       res.render('../views/index', {
         companies,
