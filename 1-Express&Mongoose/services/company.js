@@ -20,7 +20,7 @@ module.exports = {
                     telephone: company.telephone
                 }).save((err, company) => {
                     if (err) console.log(err.message)
-                    callback(company);
+                    callback(err, company);
                 })
             })
         } else {
@@ -33,7 +33,7 @@ module.exports = {
                 telephone: companyInfo.telephone,
             }).save((err, company) => {
                 if (err) console.log(err.message)
-                callback(company);
+                callback(err, company);
             })
         }
     },
@@ -45,7 +45,7 @@ module.exports = {
         }
         companyModel.find(match, exclude, (err, companies) => {
             if (err) console.log(err);
-            callback(companies);
+            callback(err, companies);
         })
     },
     update: (match, updateInfo, callback) => {
@@ -54,7 +54,7 @@ module.exports = {
                 new: true
             }, (err, company) => {
                 if (err) console.log(err);
-                callback(company);
+                callback(err, company);
             })
     },
     updateAll: (match, updateInfo, callback) => {
@@ -63,13 +63,13 @@ module.exports = {
                 new: true
             }, (err, companies) => {
                 if (err) console.log(err);
-                callback(companies);
+                callback(err, companies);
             })
     },
     delete: (match, callback) => {
         companyModel.deleteOne(match, (err, company) => {
             if (err) console.log(err);
-            callback(company);
+            callback(err, company);
         })
     }
 }

@@ -19,10 +19,10 @@ module.exports = {
                     gender: employee.gender,
                     manager: employee.manager,
                     birthday: employee.birthday,
-                    company: employee.company
+                    company_id: employee.company_id
                 }).save((err, employee) => {
                     if (err) console.log(err.message)
-                    callback(employee)
+                    callback(err, employee)
                 })
             })
         } else {
@@ -33,24 +33,24 @@ module.exports = {
                 gender: employee.gender,
                 manager: employee.manager,
                 birthday: employee.birthday,
-                company: employee.company
+                company_id: employee.company_id
             }).save((err, employee) => {
                 if (err) console.log(err.message)
                 // console.log(employee);
-                callback(employee)
+                callback(err, employee)
             })
         }
     },
-    read: (match, exclude, callback) => {
-        exclude = {
-            ...exclude,
+    read: (match, filter, callback) => {
+        filter = {
+            ...filter,
             // _id: 0,
             __v: 0
         }
-        employeeModel.find(match).populate("company").select(exclude).exec(function (err, employees) {
+        employeeModel.find(match).populate("company").select(filter).exec(function (err, employees) {
             if (err) console.log(err);
-            callback(employees)
-            console.log("find my company heeeey");
+            callback(err, employees)
+            // console.log("find my company heeeey");
         })
 
     },
@@ -61,13 +61,13 @@ module.exports = {
                 new: true
             }, (err, employee) => {
                 if (err) console.log(err);
-                callback(employee)
+                callback(err, employee)
             })
     },
     delete: (match, callback) => {
         employeeModel.deleteOne(match, (err, employee) => {
             if (err) console.log(err);
-            callback(employee);
+            callback(err, employee);
         })
     }
 }

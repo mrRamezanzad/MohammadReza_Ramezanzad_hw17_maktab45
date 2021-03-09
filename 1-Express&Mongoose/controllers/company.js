@@ -28,14 +28,41 @@ const Company = require('../services/company')
 //   province: "eslamshar",
 //   registerDate: new Date("2021"),
 //   telephone: "09191234533",
-// }, ], (companies) => {
+// }, {
+//   name: "samen",
+//   cin: "4",
+//   city: "yazd",
+//   province: "eslamshar",
+//   registerDate: new Date("2021"),
+//   telephone: "09191234533",
+// },, {
+//   name: "Day",
+//   cin: "5",
+//   city: "mashhad",
+//   province: "eslamshar",
+//   registerDate: new Date("2021"),
+//   telephone: "09191234533",
+// },, {
+//   name: "golrang",
+//   cin: "6",
+//   city: "tehran",
+//   province: "eslamshar",
+//   registerDate: new Date("2021"),
+//   telephone: "09191234533",
+// }, ], (err, companies) => {
 //   console.log(companies);
 // })
 
 
-// Company.update({_id: "603e882fb0e0560348a1c8bb"},{name: "javeed"})
-// Company.delete({_id: "603e882fb0e0560348a1c8bb"})
-// Company.read()
+// Company.update({_id: "603e882fb0e0560348a1c8bb"},{name: "javeed"}, (err, company) => {
+// console.log(company);
+// })
+// Company.delete({_id: "603e882fb0e0560348a1c8bb"}, (err, company) => {
+// console.log(company);
+// })
+// Company.read({}, {}, (err, company) => {
+// console.log(company);
+// })
 
 
 // ================= crud routes =================
@@ -64,7 +91,7 @@ router.post("/company/create", (req, res) => {
     }
   }
 
-  Company.create([newCompanyInfo], (company) => {
+  Company.create([newCompanyInfo], (err, company) => {
     if (company) {
       res.status(201).json(company)
     } else {
@@ -81,7 +108,7 @@ router.get("/company/getAll", (req, res) => {
 
   }
 
-  Company.read({}, exclude, (companies) => {
+  Company.read({}, exclude, (err, companies) => {
     if (companies) {
       res.json(companies)
     } else {
@@ -110,7 +137,7 @@ router.get("/company/get/q=", (req, res) => {
     exclude = req.query.exc && {}
   // console.log(match);
 
-  Company.read(match, exclude, (company) => {
+  Company.read(match, exclude, (err, company) => {
     if (company) {
       res.json(company)
       // console.log(company);
@@ -147,7 +174,7 @@ router.put("/company/update", (req, res) => {
   }
   if (req.query.all === "true") {
 
-    Company.updateAll({}, companyUpdateInfo, (companies) => {
+    Company.updateAll({}, companyUpdateInfo, (err, companies) => {
       if (companies) {
         res.json(companies);
       } else {
@@ -160,7 +187,7 @@ router.put("/company/update", (req, res) => {
 
     Company.update({
       _id: req.query.id
-    }, companyUpdateInfo, (company) => {
+    }, companyUpdateInfo, (err, company) => {
       if (company) {
         res.json(company);
       } else {
@@ -177,7 +204,7 @@ router.delete("/company/delete", (req, res) => {
 
   Company.delete({
     _id: req.query.id
-  }, (response) => {
+  }, (err, response) => {
     if (response) {
       res.json(response)
     } else {

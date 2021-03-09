@@ -13,7 +13,7 @@ const indexRouter = require('./controllers/index'),
 const app = express()
 
 // database connection
-mongoose.connect("mongodb://localhost:27017/hw16", {
+mongoose.connect("mongodb://localhost:27017/hw17", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })

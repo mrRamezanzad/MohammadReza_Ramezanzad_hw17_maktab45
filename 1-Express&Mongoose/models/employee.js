@@ -21,7 +21,7 @@ module.exports = mongoose.model('Employee', mongoose.Schema({
     birthday: {
         type: Date,
     },
-    company: {
+    company_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Company",
         required: true,

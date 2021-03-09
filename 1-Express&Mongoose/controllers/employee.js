@@ -3,6 +3,7 @@ const express = require('express'),
 
 // adding employee services
 const Employee = require('../services/employee')
+const Company = require('../services/company')
 
 // ============== crud services routes
 // Employee.dropCollection()
@@ -14,7 +15,7 @@ const Employee = require('../services/employee')
 //     gender: "male",
 //     manager: false,
 //     birthday: new Date("2010").toDateString(),
-//     company: "6040e076052a92381484eac2"
+//     company_id: "6047319e41cf7f2bb42b2793"
 // }, {
 //     firstName: "mitra",
 //     lastName: "vahidee",
@@ -22,7 +23,7 @@ const Employee = require('../services/employee')
 //     gender: "female",
 //     manager: true,
 //     birthday: new Date("1995").toDateString(),
-//     company: "6040e070052a92381484eac1"
+//     company_id: "6047319e41cf7f2bb42b2793"
 // }, {
 //     firstName: "masood",
 //     lastName: "rajabi",
@@ -30,8 +31,8 @@ const Employee = require('../services/employee')
 //     gender: "male",
 //     manager: false,
 //     birthday: new Date("1980").toDateString(),
-//     company: "6040e070052a92381484eac1"
-// }, ], (employees) => {
+//     company_id: "6047319e41cf7f2bb42b2793"
+// }, ], (err, employees) => {
 //     console.log(employees);
 // })
 
@@ -39,19 +40,17 @@ const Employee = require('../services/employee')
 //     _id: "603e930785955a0a1cb0c8cb"
 // }, {
 //     lastName: "javeed"
-// }), (employee) => {
+// }), (err, employee) => {
 // console.log(employee);
 // })
 // Employee.delete({
 //     _id: "603e930785955a0a1cb0c8cb"
-// }, (employee) => {
+// }, (err, employee) => {
 // console.log(employee);
 // }))
 // Employee.read({
 //     _id: "603e9cdaecf5174278badbe7"
-// }, (e) => {
-//     console.log(e);
-// }, (employee) => {
+// }, (err, employee) => {
 // console.log(employee);
 // }))
 
@@ -78,8 +77,8 @@ router.post("/employee/create", (req, res) => {
         ...(req.body.birthday) && {
             birthday: new Date(req.body.birthday)
         },
-        ...(req.body.company) && {
-            company: req.body.company
+        ...(req.body.company_id) && {
+            company_id: req.body.company_id
         }
     }
 
@@ -96,7 +95,7 @@ router.post("/employee/create", (req, res) => {
     // }
     // getInformations()
 
-    Employee.create([newEmployeeInfo], (employee) => {
+    Employee.create([newEmployeeInfo], (err, employee) => {
         if (employee) {
             res.status(201).json(employee)
         } else {
@@ -110,6 +109,7 @@ router.post("/employee/create", (req, res) => {
 // ================= read
 
 router.get("/employee/getAll", (req, res) => {
+
     let currentYear = new Date().getFullYear(),
         match = {
             ...(req.query.minAge && !req.query.maxAge) && {
@@ -130,13 +130,10 @@ router.get("/employee/getAll", (req, res) => {
             },
             ...(req.query.manager) && {
                 manager: req.query.manager
-            },
-            // ...(req.query.company) && {
-            //     company.name: {$eq: {name: req.query.company}}
-            // }
+            }
         },
         exc = req.query.exc && req.query.exc.split(","),
-        exclude = exc && {
+        filter = exc && {
             ...(exc.includes("firstName") && {
                 firstName: 0
             }),
@@ -157,27 +154,66 @@ router.get("/employee/getAll", (req, res) => {
             }
         }
 
-    // console.log(match);
-    // console.log(exclude.filter(el => el.trim()));
-    // console.log(currentYear);
 
-    Employee.read(match, exclude, (employees) => {
-        if (employees) {
-            res.json(employees)
-        } else {
-            res.json({
-                msg: "something went wrong"
-            })
-        }
-    })
+    if (req.query.company) {
+        console.log(`================== user wants employees of ${req.query.company} ================`);
+        Company.read({
+            name: `${req.query.company}`
+        }, {}, (err, targetCompany) => {
+
+            console.log("target company", targetCompany.length);
+            console.log("errrrrror", err);
+            if (err) {
+
+                return res.json({
+                    msg: "something went wrong"
+                })
+
+            }
+            if (targetCompany.length) {
+
+                Employee.read({
+                    company_id: targetCompany[0]._id
+                }, filter, (err, employees) => {
+                    if (err) {
+                        console.log(err);
+                        return res.json({
+                            msg: "something went wrong"
+                        })
+                    }
+                    console.log(employees);
+                    return res.json(employees)
+                })
+            } else {
+                return res.json({
+                    msg: "found nothing"
+                })
+            }
+        })
+
+    }
+    // console.log(match);
+    // console.log(filter.filter(el => el.trim()));
+    // console.log(currentYear);
+    else {
+        Employee.read(match, filter, (employees) => {
+            if (employees) {
+                res.json(employees)
+            } else {
+                res.json({
+                    msg: "something went wrong"
+                })
+            }
+        })
+    }
 })
 
 router.get("/employee/get", (req, res) => {
-    let exclude = {}
+    let filter = {}
 
     Employee.read({
         _id: req.query.id
-    }, exclude, (employee) => {
+    }, filter, (employee) => {
         if (employee) {
             res.json(employee)
         } else {
