@@ -1,5 +1,8 @@
-let modalBody = $(".modal-body"),
-    modalFooter = $(".modal-footer")
+let infoModal = document.getElementById('more-info-modal'),
+    modalBody = $(".modal-body"),
+    modalFooter = $(".modal-footer"),
+    modal = new bootstrap.Modal(infoModal) // Returns a Bootstrap modal instance
+
 // ============================ Search section =======================
 
 // go to search-bar action
@@ -82,7 +85,7 @@ $(document).on("click", "[role='delete-card']", function (e) {
 })
 
 // ============================ Modal Section ============================
-// new button modal
+
 $(document).on("click", "#new-button", function (e) {
     showNewInfo()
 })
@@ -120,12 +123,14 @@ function showNewInfo(data) {
     `)
 
     modalFooter.html(`
-    <button id="create-button" class="text-white btn btn-outline-success offset-left" data-bs-dismiss="modal"> Create </button>
+    <button id="create-button" class="text-white btn btn-outline-success offset-left"> Create </button>
     `)
 }
 
 // create button click action
 $(document).on("click", "#create-button", function (e) {
+    // modal.hide()
+    console.log(modal);
     let newInformation = getInformations()
     $.ajax({
         type: "POST",
@@ -214,7 +219,7 @@ function showMoreInfo(data) {
     modalFooter.html(`
     <button id="update-button" type="button" class="btn btn-warning">Update</button>
     <button id="cancel-button" hidden class="text-white btn btn-outline-dark offset-left" > cancel </button>
-    <button card-id="${data._id}" id="save-button"  hidden class="text-white btn btn-outline-success offset-left" data-bs-dismiss="modal"> Save </button>
+    <button card-id="${data._id}" id="save-button"  hidden class="text-white btn btn-outline-success offset-left"> Save </button>
     `)
 }
 
@@ -238,6 +243,7 @@ $(document).on("click", "#cancel-button", function (e) {
 
 // save update click
 $(document).on("click", "#save-button", function (e) {
+    // modal.hide()
     console.log("saveing proccess started");
     let newInformation = getInformations(),
         cardId = $(this).attr("card-id")

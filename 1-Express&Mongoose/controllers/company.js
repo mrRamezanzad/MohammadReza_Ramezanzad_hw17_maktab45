@@ -95,7 +95,7 @@ router.post("/company/create", (req, res) => {
     if (company) {
       res.status(201).json(company)
     } else {
-      res.json({
+      res.status(500).json({
         msg: "something went wrong"
       })
     }
@@ -123,7 +123,7 @@ router.get("/company/getAll", (req, res) => {
     if (companies) {
       res.json(companies)
     } else {
-      res.json({
+      res.status(500).json({
         msg: "something went wrong"
       })
     }
@@ -153,7 +153,7 @@ router.get("/company/get/q=", (req, res) => {
       res.json(company)
       // console.log(company);
     } else {
-      res.json({
+      res.status(500).json({
         msg: "nothing found"
       })
     }
@@ -189,7 +189,7 @@ router.put("/company/update", (req, res) => {
       if (companies) {
         res.json(companies);
       } else {
-        res.json({
+        res.status(500).json({
           msg: "something went wrong"
         })
       }
@@ -202,7 +202,7 @@ router.put("/company/update", (req, res) => {
       if (company) {
         res.json(company);
       } else {
-        res.json({
+        res.status(500).json({
           msg: "something went wrong"
         })
       }
@@ -219,7 +219,7 @@ router.delete("/company/delete", (req, res) => {
     if (response) {
       res.json(response)
     } else {
-      res.json({
+      res.status(500).json({
         msg: "something went wrong"
       })
     }

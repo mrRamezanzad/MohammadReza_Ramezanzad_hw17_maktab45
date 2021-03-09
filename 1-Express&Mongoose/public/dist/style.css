@@ -53,34 +53,34 @@ nav .nav-item .nav-link {
   color: black !important;
 }
 
-.card {
+main .card {
   width: 90%;
   border-radius: 10px;
 }
-.card p {
+main .card p {
   margin-bottom: 0.3rem;
 }
-.card img {
+main .card img {
   border-radius: 10px 10px 0 0;
   height: 250px !important;
 }
-.card .btn-more {
+main .card .btn-more {
   width: 45%;
   margin-left: auto;
   border-radius: 8px;
   display: block;
   background: #74654B !important;
 }
-.card .btn-more:hover {
+main .card .btn-more:hover {
   color: #968561 !important;
   text-shadow: 0 2px 1px #968561;
   font-weight: 500;
   background-color: white !important;
 }
-.card #delete-button {
+main .card #delete-button {
   color: red;
 }
-.card #delete-button:hover {
+main .card #delete-button:hover {
   color: orange;
   text-shadow: 0 1px 3px red;
   cursor: pointer;

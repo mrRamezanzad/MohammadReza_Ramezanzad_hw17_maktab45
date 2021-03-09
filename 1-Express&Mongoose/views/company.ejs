@@ -9,12 +9,11 @@
         </div>
         <main class="row gx-sm-3 gx-md-5">
             <% companies.forEach(company=> {%>
-              <%- include("./partials/card", {company}) %>   
-            <% }) %>
-        <!-- modal -->
-        <%- include("./partials/modal") %>             
+                <%- include("./partials/card", {company}) %>
+                    <% }) %>
+                        <!-- modal -->
+                        <%- include("./partials/modal") %>
         </main>
     </div>
-
 
     <%- include("./partials/footer") %>

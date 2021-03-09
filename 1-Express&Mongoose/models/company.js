@@ -3,10 +3,13 @@ const mongoose = require('mongoose')
 module.exports = mongoose.model("Company", mongoose.Schema({
     name: {
         type: String,
+        unique: true,
+        required: true
     },
     cin: {
         type: String,
-        required: true,
+        unique: true,
+        required: true
     },
     city: {
         type: String,
@@ -16,9 +19,11 @@ module.exports = mongoose.model("Company", mongoose.Schema({
     },
     registerDate: {
         type: Date,
+        required: true
     },
     telephone: {
         type: String,
+
     }
 
 }))
