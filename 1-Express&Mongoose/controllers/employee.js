@@ -3,7 +3,6 @@ const express = require('express'),
 
 // adding employee services
 const Employee = require('../services/employee')
-const Company = require('../services/company')
 
 // ============== crud services routes
 // Employee.dropCollection()
@@ -81,7 +80,7 @@ const Company = require('../services/company')
 // ================= crud routes =================
 
 // ================= create 
-router.post("/employee/create", (req, res) => {
+router.post("/api/employees/", (req, res) => {
     let newEmployeeInfo = {
         ...(req.body.firstName) && {
             firstName: req.body.firstName
@@ -120,19 +119,19 @@ router.post("/employee/create", (req, res) => {
     // getInformations()
 
     Employee.create([newEmployeeInfo], (err, employee) => {
-        if (employee) {
-            res.status(201).json(employee)
-        } else {
-            res.json({
+        if (err) {
+            res.status(500).json({
                 msg: "something went wrong"
             })
+        } else {
+            res.status(201).json(employee)
         }
     })
 })
 
 // ================= read
 
-router.get("/employee/getAll", (req, res) => {
+router.get("/api/employees/", (req, res) => {
 
     let currentYear = new Date().getFullYear(),
         match = {
@@ -185,7 +184,7 @@ router.get("/employee/getAll", (req, res) => {
 
             if (err) {
 
-                return res.json({
+                return res.status(500).json({
                     msg: "something went wrong in getting a companies employees"
                 })
             }
@@ -196,7 +195,7 @@ router.get("/employee/getAll", (req, res) => {
                 }, filter, (err, employees) => {
                     if (err) {
                         console.log(err);
-                        return res.json({
+                        return res.status(500).json({
                             msg: "something went wrong "
                         })
                     }
@@ -216,21 +215,21 @@ router.get("/employee/getAll", (req, res) => {
     else {
         Employee.read(match, filter, (err, employees) => {
             console.log("employeeeee", employees);
-            if (employees) {
-                res.json(employees)
-            } else {
-                res.json({
+            if (err) {
+                res.status(500).json({
                     msg: "something went wrong in getting all employees"
                 })
+            } else {
+                res.json(employees)
             }
         })
     }
 })
 
-router.get("/employee/get", (req, res) => {
+router.get("/api/employees/:id", (req, res) => {
     let currentYear = new Date().getFullYear(),
         match = {
-            ...(req.query.id) && {
+            ...(req.params.id) && {
                 _id: req.query.id
             },
             ...(req.query.minAge && !req.query.maxAge) && {
@@ -284,30 +283,30 @@ router.get("/employee/get", (req, res) => {
                 company: company[0]._id
             }
             Employee.read(match, filter, (err, employee) => {
-                if (employee) {
-                    res.json(employee)
-                } else {
-                    res.json({
+                if (err) {
+                    res.status(500).json({
                         msg: "something went wrong"
                     })
+                } else {
+                    res.json(employee)
                 }
             })
         })
     } else {
         Employee.read(match, filter, (err, employee) => {
-            if (employee) {
-                res.json(employee)
-            } else {
-                res.json({
+            if (err) {
+                res.status(500).json({
                     msg: "something went wrong"
                 })
+            } else {
+                res.json(employee)
             }
         })
     }
 })
 
 // ================= update 
-router.put("/employee/update", (req, res) => {
+router.put("/api/employees/:id", (req, res) => {
 
     let employeeUpdateInfo = {
         ...(req.body.firstName) && {
@@ -334,29 +333,29 @@ router.put("/employee/update", (req, res) => {
     }
 
     Employee.update({
-        _id: req.query.id
+        _id: req.params.id
     }, employeeUpdateInfo, (err, employee) => {
-        if (employee) {
-            res.json(employee);
-        } else {
-            res.json({
+        if (err) {
+            res.status(500).json({
                 msg: "something went wrong"
             })
+        } else {
+            res.json(employee);
         }
     })
 })
 
 // =================== delete
-router.delete("/employee/delete", (req, res) => {
+router.delete("/api/employees/", (req, res) => {
     Employee.delete({
-        _id: req.query.id
+        _id: req.params.id
     }, (err, response) => {
-        if (response) {
-            res.json(response)
-        } else {
-            res.json({
+        if (err) {
+            res.status(500).json({
                 msg: "something went wrong"
             })
+        } else {
+            res.json(response)
         }
     })
 })

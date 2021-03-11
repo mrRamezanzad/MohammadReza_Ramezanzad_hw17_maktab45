@@ -1,19 +1,33 @@
+<!-- HTML header -->
 <%- include("./partials/header") %>
+
+    <!--  alert component -->
+    <%- include("./partials/alert") %>
 
     <div class="container text-capitalize">
         <div class="row justify-content-center align-items-center ">
+
+            <!--  filter component -->
             <%- include("./partials/filter") %>
+
             <div id="new-button" class="btn fs-1 text-right w-5" data-bs-toggle="modal"
-                data-bs-target="#more-info-modal">
-                &plus;</div>
+            data-bs-target="#more-info-modal">
+            &plus;
         </div>
-        <main class="row gx-sm-3 gx-md-5">
+    </div>
+    
+    <main class="row gx-sm-3 gx-md-5">
+
+            <!-- card component -->
             <% companies.forEach(company=> {%>
                 <%- include("./partials/card", {company}) %>
-                    <% }) %>
-                        <!-- modal -->
-                        <%- include("./partials/modal") %>
-        </main>
+            <% }) %>
+    </main>
+
+    <!-- modal component -->
+    <%- include("./partials/modal") %>
+
     </div>
 
-    <%- include("./partials/footer") %>
+<!-- importing HTML footer  -->
+<%- include("./partials/footer") %>

@@ -147,3 +147,7 @@ main .card #delete-button:hover {
 #delete-user[data-bs-dismiss=modal]:hover {
   color: black !important;
 }
+
+.alert {
+  z-index: 1080;
+}

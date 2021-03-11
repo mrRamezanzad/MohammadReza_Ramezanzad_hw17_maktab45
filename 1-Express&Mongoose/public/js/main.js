@@ -1,7 +1,7 @@
-let infoModal = document.getElementById('more-info-modal'),
-    modalBody = $(".modal-body"),
+let modalBody = $(".modal-body"),
     modalFooter = $(".modal-footer"),
-    modal = new bootstrap.Modal(infoModal) // Returns a Bootstrap modal instance
+    modal = new bootstrap.Modal(document.getElementById('more-info-modal')),
+    msgAlert = new bootstrap.Alert(document.getElementById('myAlert'))
 
 // ============================ Search section =======================
 
@@ -72,10 +72,10 @@ $(document).on("click", "[role='delete-card']", function (e) {
     console.log(cardId);
     $.ajax({
         type: "DELETE",
-        url: `/company/delete?id=${cardId}`,
+        url: `/api/companies/${cardId}`,
         success: function (response) {
             console.log("success:", response);
-            location.reload()
+            //location.reload()
         },
         error: function (err) {
             console.log("error:", err);
@@ -85,7 +85,6 @@ $(document).on("click", "[role='delete-card']", function (e) {
 })
 
 // ============================ Modal Section ============================
-
 $(document).on("click", "#new-button", function (e) {
     showNewInfo()
 })
@@ -134,13 +133,13 @@ $(document).on("click", "#create-button", function (e) {
     let newInformation = getInformations()
     $.ajax({
         type: "POST",
-        url: "/company/create",
+        url: "/api/companies/",
         data: newInformation,
         dataType: "json",
         success: function (response) {
             if (response) {
                 console.log("success: ", response);
-                location.reload()
+                //location.reload()
             }
         },
         error: function (err) {
@@ -170,7 +169,7 @@ $(document).on("click", ".btn-more", function (e) {
     let cardId = $(this).attr("card-id")
     $.ajax({
         type: "GET",
-        url: `/company/get/q=?id=${cardId}`,
+        url: `/api/companies/get/q=?id=${cardId}`,
         success: function (response) {
             console.log("success:", response);
             showMoreInfo(response[0])
@@ -250,13 +249,13 @@ $(document).on("click", "#save-button", function (e) {
 
     $.ajax({
         type: "put",
-        url: `/company/update?id=${cardId}`,
+        url: `/api/companies/${cardId}`,
         data: newInformation,
         dataType: "json",
         success: function (response) {
             if (response) {
                 console.log("success: ", response);
-                location.reload()
+                //location.reload()
             }
         },
         error: function (err) {

@@ -1,20 +1,17 @@
+<!-- importing HTML header -->
 <%- include("./partials/header") %>
 
-    <div class="container text-capitalize">
-        <div class="row justify-content-center align-items-center ">
-            <%- include("./partials/filter") %>
-            <div id="new-button" class="btn fs-1 text-right w-5" data-bs-toggle="modal"
-                data-bs-target="#more-info-modal">
-                &plus;</div>
+
+    <main class="container text-capitalize">
+
+        <!-- main  -->
+        <div class="row py-5 gx-sm-3 gx-md-5 text-center">
+
+            <!-- under maintenance page comment -->
+            <h4 class="my-5">.در حال حاضر چیزی برای صفحه اصلی طراحی نشده است</h4>
+            <p>.لطفا به صفحات <a class="text-primary" href="/companies/">شرکت ها</a> و <a class="text-primary" href="/employees/">کارمندان</a> مراجعه کنید</p>
+
         </div>
-        <main class="row gx-sm-3 gx-md-5">
-            <% companies.forEach(company=> {%>
-              <%- include("./partials/card", {company}) %>   
-            <% }) %>
-        <!-- modal -->
-        <%- include("./partials/modal") %>             
-        </main>
-    </div>
 
-
-    <%- include("./partials/footer") %>
+        <!-- importing HTML footer -->
+        <%- include("./partials/footer") %>

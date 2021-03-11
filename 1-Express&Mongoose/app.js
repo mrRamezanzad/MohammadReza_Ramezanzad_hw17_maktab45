@@ -3,7 +3,9 @@ const createError = require('http-errors'),
   path = require('path'),
   cookieParser = require('cookie-parser'),
   logger = require('morgan'),
-  mongoose = require('mongoose')
+  mongoose = require('mongoose'),
+  flash = require('express-flash-messages'),
+  session = require('express-session')
 
 // adding controllers
 const indexRouter = require('./controllers/index'),
@@ -30,6 +32,11 @@ app.use(express.urlencoded({
 }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
+app.use(flash())
+app.use(session({ cookie: { maxAge: 60000 }, 
+                  secret: 'woot',
+                  resave: false, 
+                  saveUninitialized: false}));
 
 // using controllers
 app.use('/', [indexRouter, companyRouter, employeeRouter])

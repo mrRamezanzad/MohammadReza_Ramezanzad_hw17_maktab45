@@ -12,6 +12,7 @@ router.get('/', function (req, res) {
     _id: 0
   }, (err, companies) => {
     if (companies) {
+
       res.render('../views/index', {
         companies,
         page: "home"
@@ -26,15 +27,16 @@ router.get('/', function (req, res) {
 
 })
 
-/* GET cantact page. */
-router.get('/company', function (req, res) {
+/* GET company page. */
+router.get('/companies/', function (req, res) {
+      // res.locals.message = "test message"
   let companies = Company.read({}, {
     _id: 0
   }, (err, companies) => {
     if (companies) {
       res.render('../views/company', {
         companies,
-        page: "company"
+        page: "company",
       })
       console.log(companies);
     } else {
@@ -45,8 +47,8 @@ router.get('/company', function (req, res) {
   })
 })
 
-/* GET about page. */
-router.get('/employee', function (req, res) {
+/* GET employee page. */
+router.get('/employees/', function (req, res) {
   let companies = Company.read({}, {
     _id: 0
   }, (err, companies) => {

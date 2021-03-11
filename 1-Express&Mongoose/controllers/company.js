@@ -50,26 +50,21 @@ const Company = require('../services/company')
 //   registerDate: new Date("2021"),
 //   telephone: "09191234533",
 // }, ], (err, companies) => {
-//   console.log(companies);
 // })
 
 
 // Company.update({_id: "603e882fb0e0560348a1c8bb"},{name: "javeed"}, (err, company) => {
-// console.log(company);
 // })
 // Company.delete({_id: "603e882fb0e0560348a1c8bb"}, (err, company) => {
-// console.log(company);
 // })
 // Company.read({}, {}, (err, company) => {
-// console.log(company);
 // })
 
 
 // ================= crud routes =================
 
 // ================= create 
-router.post("/company/create", (req, res) => {
-  console.log(req.body)
+router.post("/api/companies/", (req, res) => {
   let newCompanyInfo = {
     ...(req.body.name) && {
       name: req.body.name
@@ -92,18 +87,18 @@ router.post("/company/create", (req, res) => {
   }
 
   Company.create([newCompanyInfo], (err, company) => {
-    if (company) {
-      res.status(201).json(company)
-    } else {
-      res.status(500).json({
+    if (err) {
+      res.status(400).json({
         msg: "something went wrong"
       })
+    } else {
+      res.status(201).json(company)
     }
   })
 })
 
 // ================= read
-router.get("/company/getAll", (req, res) => {
+router.get("/api/companies/", (req, res) => {
 
   let selectedRegister = new Date()
   selectedRegister.setFullYear(selectedRegister.getFullYear() - req.query.lt)
@@ -120,18 +115,18 @@ router.get("/company/getAll", (req, res) => {
     filter = req.query.exc && {}
 
   Company.read(match, filter, (err, companies) => {
-    if (companies) {
-      res.json(companies)
-    } else {
-      res.status(500).json({
+    if (err) {
+      res.status(400).json({
         msg: "something went wrong"
       })
+    } else {
+      res.json(companies)
     }
   })
 })
 
 // ================= get queries
-router.get("/company/get/q=", (req, res) => {
+router.get("/api/companies/:id/", (req, res) => {
 
   let selectedRegister = new Date()
   selectedRegister.setFullYear(selectedRegister.getFullYear() - req.query.lt)
@@ -142,26 +137,24 @@ router.get("/company/get/q=", (req, res) => {
         },
       },
       ...(req.query.id) && {
-        _id: req.query.id
+        _id: req.params.id
       }
     },
     filter = req.query.exc && {}
-  // console.log(match);
 
   Company.read(match, filter, (err, company) => {
-    if (company) {
-      res.json(company)
-      // console.log(company);
-    } else {
-      res.status(500).json({
+    if (err) {
+      res.status(400).json({
         msg: "nothing found"
       })
+    } else {
+      res.json(company)
     }
   })
 });
 
 // ================= update 
-router.put("/company/update", (req, res) => {
+router.put("/api/companies/:id", (req, res) => {
 
   let companyUpdateInfo = {
     ...(req.body.name) && {
@@ -186,42 +179,42 @@ router.put("/company/update", (req, res) => {
   if (req.query.all === "true") {
 
     Company.updateAll({}, companyUpdateInfo, (err, companies) => {
-      if (companies) {
-        res.json(companies);
-      } else {
-        res.status(500).json({
+      if (err) {
+        res.status(400).json({
           msg: "something went wrong"
         })
+      } else {
+        res.json(companies);
       }
     })
   } else {
 
     Company.update({
-      _id: req.query.id
+      _id: req.params.id
     }, companyUpdateInfo, (err, company) => {
-      if (company) {
-        res.json(company);
-      } else {
-        res.status(500).json({
+      if (err) {
+        res.status(400).json({
           msg: "something went wrong"
         })
+      } else {
+        res.json(company);
       }
     })
   }
 })
 
 // =================== delete
-router.delete("/company/delete", (req, res) => {
+router.delete("/api/companies/:id", (req, res) => {
 
   Company.delete({
-    _id: req.query.id
+    _id: req.params.id
   }, (err, response) => {
-    if (response) {
-      res.json(response)
-    } else {
-      res.status(500).json({
+    if (err) {
+      res.status(400).json({
         msg: "something went wrong"
       })
+    } else {
+      res.json(response)
     }
   })
 })
