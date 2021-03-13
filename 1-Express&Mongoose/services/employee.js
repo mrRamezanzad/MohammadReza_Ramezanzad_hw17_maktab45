@@ -60,7 +60,20 @@ module.exports = {
         })
     },
 
-    // =============== update employee =============== 
+    // =============== update one employee =============== 
+    updateOne: (match, updateInfo, callback) => {
+        
+        // console.log(match, updateInfo);
+        employeeModel.updateOne(
+            match, updateInfo, {
+                new: true
+            }, (err, employee) => {
+                if (err) console.log(err);
+                callback(err, employee)
+            })
+    },
+
+    // =============== update all employees =============== 
     update: (match, updateInfo, callback) => {
         employeeModel.findOneAndUpdate(
             match, updateInfo, {
@@ -71,7 +84,7 @@ module.exports = {
             })
     },
 
-    // ============= delete employee =============
+// ============= delete employee =============
     delete: (match, callback) => {
         employeeModel.deleteOne(match, (err, employee) => {
             if (err) console.log(err);

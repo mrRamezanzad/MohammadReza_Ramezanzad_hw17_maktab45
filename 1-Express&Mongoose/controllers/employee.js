@@ -199,7 +199,7 @@ router.get("/api/employees/", (req, res) => {
                             msg: "something went wrong "
                         })
                     }
-                    console.log(employees);
+                    // console.log(employees);
                     return res.json(employees)
                 })
             } else {
@@ -214,7 +214,8 @@ router.get("/api/employees/", (req, res) => {
     // console.log(currentYear);
     else {
         Employee.read(match, filter, (err, employees) => {
-            console.log("employeeeee", employees);
+            
+            // console.log("employeeeee", employees);
             if (err) {
                 res.status(500).json({
                     msg: "something went wrong in getting all employees"
@@ -227,6 +228,7 @@ router.get("/api/employees/", (req, res) => {
 })
 
 router.get("/api/employees/:id", (req, res) => {
+
     // console.log("i got the request here", req.params.id);
     let currentYear = new Date().getFullYear(),
         match = {
@@ -294,27 +296,30 @@ router.get("/api/employees/:id", (req, res) => {
                 }
             })
         })
+
     } else {
 
         Employee.read(match, filter, (err, employee) => {
-            console.log(match, filter);
+
+            // console.log(match, filter);
             if (err) {
                 console.log(err);
                 res.status(500).json({
                     msg: "something went wrong"
                 })
             } else {
-                console.log(employee);
+                // console.log(employee);
                 res.json(employee)
             }
         })
     }
 })
 
-// ================= update 
+// ================= update one
 router.put("/api/employees/:id", (req, res) => {
-    console.log("im here dude", req.params.id);
-    console.log("============== req.body ============\n", req.body);
+
+    // console.log("im here dude", req.params.id);
+    // console.log("============== req.body ============\n", req.body);
 
     let employeeUpdateInfo = {
         ...(req.body.firstName) && {
@@ -339,7 +344,51 @@ router.put("/api/employees/:id", (req, res) => {
             company: req.body.company
         }
     }
-    console.log("============================i generated this info============================\n", employeeUpdateInfo);
+    
+    // console.log("============================i generated this info============================\n", employeeUpdateInfo);
+    Employee.updateOne({
+        _id: req.params.id
+    }, employeeUpdateInfo, (err, employee) => {
+        if (err) {
+            res.status(500).json({
+                msg: "something went wrong"
+            })
+        } else {
+            res.json(employee);
+        }
+    })
+})
+
+// ================= update all
+router.put("/api/employees/", (req, res) => {
+
+    // console.log("im here dude", req.params.id);
+    // console.log("============== req.body ============\n", req.body);
+
+    let employeeUpdateInfo = {
+        ...(req.body.firstName) && {
+            firstName: req.body.firstName
+        },
+        ...(req.body.lastName) && {
+            lastName: req.body.lastName
+        },
+        ...(req.body.id) && {
+            id: req.body.id
+        },
+        ...(req.body.gender) && {
+            gender: req.body.gender
+        },
+        ...(req.body.manager) && {
+            manager: req.body.manager
+        },
+        ...(req.body.birthday) && {
+            birthday: new Date(req.body.birthday)
+        },
+        ...(req.body.company) && {
+            company: req.body.company
+        }
+    }
+    // console.log("============================i generated this info============================\n", employeeUpdateInfo);
     Employee.update({
         _id: req.params.id
     }, employeeUpdateInfo, (err, employee) => {

@@ -18,6 +18,8 @@ $(".delete-employee").on("click", function (e) {
         },
         error: function (err) {
             if (err) console.log("ERROR MESSAGE===>", err);
+            alert("there was a problem with your request")
+            location.reload()
 
         }
     });
@@ -40,12 +42,16 @@ $('.edit-employee').on("click", function (e) {
                 },
                 error: function (err) {
                     // if (err) console.log("ERROR MESSAGE===>", err);
+                    alert("there was a problem with your request")
+                    location.reload()
 
                 }
             });
         },
         error: function (err) {
             if (err) console.log("ERROR MESSAGE===>", err);
+            alert("there was a problem with your request")
+            location.reload()
 
         }
     })
@@ -124,9 +130,11 @@ $(document).on("click", "#save-employee", function (e) {
             location.reload()
 
         },
-        erro: function (err) {
+        error: function (err) {
             if (err) console.log("error message =>", err);
             alert("there was a problem with your data")
+            location.reload()
+
         }
     });
 })
@@ -144,7 +152,7 @@ function getEditedInformation() {
     }
 }
 
-// ================== creating new section ==================
+// ================== show new model create button click ==================
 
 // create new button click
 $('#new-button').on("click", function (e) {
@@ -158,6 +166,10 @@ $('#new-button').on("click", function (e) {
         },
         error: function (err) {
             if (err) console.log("ERROR MESSAGE===>", err);
+            alert("there was a problem with your request")
+            location.reload()
+
+
 
         }
     });
@@ -217,7 +229,7 @@ function showNewModal(companies) {
 }
 
 
-// create employee button click  
+// create employee with input data button click  
 $(document).on("click", "#create-employee", function (e) {
     e.preventDefault()
     let newEmployeeInfo = getNewInformation()
@@ -236,9 +248,14 @@ $(document).on("click", "#create-employee", function (e) {
             location.reload()
 
         },
-        erro: function (err) {
-            if (err) console.log("error message =>", err);
-            alert("there was a problem with your data")
+        error: function (err) {
+            if (err) {
+
+                alert("there was a problem with your data")
+                console.log("error message =>", err);
+                // location.reload()
+
+            }
         }
     });
 })

@@ -20,7 +20,7 @@ router.get('/companies/', function (req, res) {
       res.render('company', {
         companies,
       })
-      console.log(companies);
+      // console.log(companies);
     } else {
       res.render('company', {
         msg: "something went wrong"
@@ -38,7 +38,7 @@ router.get('/employees/', function (req, res) {
       res.render('employee', {
         employees,
       })
-      console.log(employees);
+      // console.log(employees);
 
     } else {
       res.render('employee', {
@@ -60,7 +60,7 @@ router.get('/companies/:id/employees/', (req, res) => {
       res.render('employee', {
         employees,
       })
-      console.log(employees);
+      // console.log(employees);
 
     } else {
       res.render('employee', {
