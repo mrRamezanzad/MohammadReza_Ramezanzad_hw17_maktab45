@@ -1,4 +1,4 @@
-<div class=" card col-md-50  mb-2 px-3 py-2 position-relative">
+<div class="card col-md-50  mb-2 px-3 py-2 position-relative">
 
     <% if(employee.manager === true) { %> 
         <!-- manager mark -->
@@ -36,10 +36,10 @@
         <div class="col-md-3 d-flex justify-content-center">
 
             <!-- edit button -->
-            <icon id="edit-employee" class="bi bi-pencil p-2 fs-4 border-end"></icon>
+            <icon card-id="<%= employee._id %>" class="edit-employee bi bi-pencil p-2 fs-4 border-end"></icon>
 
             <!-- delete button -->
-            <icon id="delete-employee" class="bi bi-trash2 p-2 fs-4"></icon>
+            <icon card-id="<%= employee._id %>" class="delete-employee bi bi-trash2 p-2 fs-4"></icon>
 
         </div>
     </div>

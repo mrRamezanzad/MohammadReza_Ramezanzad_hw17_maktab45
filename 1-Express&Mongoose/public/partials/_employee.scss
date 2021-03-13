@@ -23,21 +23,33 @@
             ;
         }
 
-        #edit-employee,
-        #delete-employee {
+        .edit-employee,
+        .delete-employee {
             cursor: pointer;
         }
 
-        #edit-employee {
+        .edit-employee {
             &:hover {
                 color: orange;
             }
         }
 
-        #delete-employee {
+        .delete-employee {
             &:hover {
                 color: orangered;
             }
         }
+    }
+}
+
+// ============== modal styles ================
+.modal--employee{
+    .modal-content{
+
+        background-color: #EEEEF1 !important;
+        color: black;
+    }
+    .modal-body{
+        padding-top: 0 !important;
     }
 }

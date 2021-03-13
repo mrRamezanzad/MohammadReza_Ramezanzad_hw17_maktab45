@@ -1,6 +1,8 @@
 let employeeModel = require('../models/employee')
 
 module.exports = {
+
+    // ================ drop the collection ================ 
     dropCollection: (model = employeeModel) => {
         model.remove({}, (err, employees) => {
             if (err) console.log(err)
@@ -8,6 +10,8 @@ module.exports = {
 
         })
     },
+
+    // ============ create new employee ============ 
     create: (employeeInfo, callback) => {
 
         if (Array.isArray(employeeInfo)) {
@@ -25,6 +29,8 @@ module.exports = {
                     callback(err, employee)
                 })
             })
+
+            // ========= create new employees ========= 
         } else {
             new employeeModel({
                 firstName: employee.firstName,
@@ -36,11 +42,12 @@ module.exports = {
                 company: employee.company
             }).save((err, employee) => {
                 if (err) console.log(err.message)
-                // console.log(employee);
                 callback(err, employee)
             })
         }
     },
+
+    // ================ read employees ================ 
     read: (match, filter, callback) => {
         filter = {
             ...filter,
@@ -50,11 +57,10 @@ module.exports = {
         employeeModel.find(match).populate("company").select(filter).exec(function (err, employees) {
             if (err) console.log(err);
             callback(err, employees)
-            // console.log("find my company heeeey");
         })
-
     },
 
+    // =============== update employee =============== 
     update: (match, updateInfo, callback) => {
         employeeModel.findOneAndUpdate(
             match, updateInfo, {
@@ -64,6 +70,8 @@ module.exports = {
                 callback(err, employee)
             })
     },
+
+    // ============= delete employee =============
     delete: (match, callback) => {
         employeeModel.deleteOne(match, (err, employee) => {
             if (err) console.log(err);

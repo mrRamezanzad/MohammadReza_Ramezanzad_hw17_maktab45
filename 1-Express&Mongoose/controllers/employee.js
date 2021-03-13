@@ -227,10 +227,11 @@ router.get("/api/employees/", (req, res) => {
 })
 
 router.get("/api/employees/:id", (req, res) => {
+    console.log("i got the request here", req.params.id);
     let currentYear = new Date().getFullYear(),
         match = {
             ...(req.params.id) && {
-                _id: req.query.id
+                _id: req.params.id
             },
             ...(req.query.minAge && !req.query.maxAge) && {
                 birthday: {
@@ -275,6 +276,7 @@ router.get("/api/employees/:id", (req, res) => {
         }
 
     if (req.query.company) {
+
         Company.read({
             name: req.query.company
         }, {}, (err, company) => {
@@ -293,12 +295,16 @@ router.get("/api/employees/:id", (req, res) => {
             })
         })
     } else {
+
         Employee.read(match, filter, (err, employee) => {
+            console.log(match, filter);
             if (err) {
+                console.log(err);
                 res.status(500).json({
                     msg: "something went wrong"
                 })
             } else {
+                console.log(employee);
                 res.json(employee)
             }
         })
@@ -346,7 +352,8 @@ router.put("/api/employees/:id", (req, res) => {
 })
 
 // =================== delete
-router.delete("/api/employees/", (req, res) => {
+router.delete("/api/employees/:id", (req, res) => {
+
     Employee.delete({
         _id: req.params.id
     }, (err, response) => {
