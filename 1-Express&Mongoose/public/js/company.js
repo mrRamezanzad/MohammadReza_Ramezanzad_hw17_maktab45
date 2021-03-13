@@ -4,7 +4,7 @@ let modalBody = $(".modal-body"),
     msgAlert = new bootstrap.Alert(document.getElementById('myAlert'))
 
 
-    // ======================= Delete button ============================
+// ======================= Delete button ============================
 $(document).on("click", "[role='delete-card']", function (e) {
     let cardId = String($(this).attr('card-id'))
     console.log(cardId);
@@ -79,11 +79,15 @@ $(document).on("click", "#create-button", function (e) {
             if (response) {
                 console.log("success: ", response);
                 //location.reload()
+                alert("successfully created")
+                location.reload()
             }
         },
         error: function (err) {
             if (err) {
                 console.log("error: ", err);
+                alert("there was a problem with your data")
+                location.reload()
             }
         }
     });
@@ -194,12 +198,14 @@ $(document).on("click", "#save-button", function (e) {
         success: function (response) {
             if (response) {
                 console.log("success: ", response);
-                //location.reload()
+                alert("saved succesfully")
+                location.reload()
             }
         },
         error: function (err) {
             if (err) {
                 console.log("error: ", err);
+                alert("there was a problem with your data")
             }
         }
     });

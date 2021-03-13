@@ -59,8 +59,6 @@ function showEditModal(employee, companies) {
         companySelect += `<option ${company._id === employee.company._id ? "selected": ""} value="${company._id}">${company.name}</option>`
     })
 
-    console.log(companySelect);
-
     employee.birthday = new Date(employee.birthday)
     // reset the modal conent
     modalBody.html('')
@@ -78,15 +76,15 @@ function showEditModal(employee, companies) {
             <input class="form-control" type="text" name="last-name", value="${employee.lastName}" placeholder = "first name" required>
             
             <label class="mt-2 mb-1" for="gender">gender:</label>
-            <select class="form-select" aria-label="gender">
+            <select name="gender" class="form-select" aria-label="gender">
             <option ${employee.gender === "male" ? "selected": ""} value="male">male</option>
             <option ${employee.gender === "female" ? "selected": ""} value="female">female</option>
             </select>
             
             <label class="mt-2 mb-1" for="position">position:</label>
-            <select class="form-select" aria-label="manager">
-            <option ${employee.manager === "true" ? "selected": ""} value="male">manager</option>
-            <option ${employee.manager === "false" ? "selected": ""} value="female">employee</option>
+            <select name="manager" class="form-select" aria-label="manager">
+            <option ${employee.manager === true ? "selected": ""} value="true">manager</option>
+            <option ${employee.manager === false ? "selected": ""} value="false">employee</option>
             </select>
             
             <label class="mt-2 mb-1" for="birthday">birthday:</label>
@@ -94,15 +92,54 @@ function showEditModal(employee, companies) {
             
             <label class="mt-2 mb-1" for="company">company:</label>
 
-            <select class="form-select" aria-label="manager">
+            <select name="company" class="form-select" aria-label="manager">
                 ${companySelect}
             </select>
             
-            <div class="d-flex justify-content-end ">
-                <button type="submit" class="btn btn-success w-auto mt-3 mb-0 justify-self-end">save</button>
+            <div card-id="${employee._id}" id="save-employee" class="d-flex justify-content-end ">
+                <button class="btn btn-success w-auto mt-3 mb-0 justify-self-end">save</button>
             </div>
 
         </form>
-            `)
+    `)
+}
 
+
+// save employee button click  
+$(document).on("click", "#save-employee", function (e) {
+    e.preventDefault()
+    let newEmployeeInfo = getEditedInformation()
+    // console.log(newEmployeeInfo);
+
+    // sendign new data to api
+    $.ajax({
+        type: "PUT",
+        url: `http://localhost/api/employees/${$(this).attr("card-id")}`,
+        data: newEmployeeInfo,
+        dataType: "json",
+        success: function (response) {
+            if (response) console.log("success message =>", response);
+            modal.hide()
+            alert("saved successfully")
+            location.reload()
+
+        },
+        erro: function (err) {
+            if (err) console.log("error message =>", err);
+            alert("there was a problem with your data")
+        }
+    });
+})
+
+
+function getEditedInformation() {
+    return {
+        firstName: $("[name='first-name']").val(),
+        lastName: $("[name='last-name']").val(),
+        gender: $("[name='gender']").val(),
+        manager: $("[name='manager']").val(),
+        birthday: new Date($("[name='birthday']").val()),
+        company: $("[name='company']").val()
+
+    }
 }

@@ -227,7 +227,7 @@ router.get("/api/employees/", (req, res) => {
 })
 
 router.get("/api/employees/:id", (req, res) => {
-    console.log("i got the request here", req.params.id);
+    // console.log("i got the request here", req.params.id);
     let currentYear = new Date().getFullYear(),
         match = {
             ...(req.params.id) && {
@@ -313,6 +313,8 @@ router.get("/api/employees/:id", (req, res) => {
 
 // ================= update 
 router.put("/api/employees/:id", (req, res) => {
+    console.log("im here dude", req.params.id);
+    console.log("============== req.body ============\n", req.body);
 
     let employeeUpdateInfo = {
         ...(req.body.firstName) && {
@@ -331,13 +333,13 @@ router.put("/api/employees/:id", (req, res) => {
             manager: req.body.manager
         },
         ...(req.body.birthday) && {
-            birthday: req.body.birthday
+            birthday: new Date(req.body.birthday)
         },
         ...(req.body.company) && {
-            birthday: req.body.company
+            company: req.body.company
         }
     }
-
+    console.log("============================i generated this info============================\n", employeeUpdateInfo);
     Employee.update({
         _id: req.params.id
     }, employeeUpdateInfo, (err, employee) => {
