@@ -154,3 +154,19 @@ main .card #delete-button:hover {
 .body__employee {
   background-color: #EEEEF1;
 }
+.body__employee .card .card__avatar {
+  object-fit: fill;
+  display: block;
+  width: 60px;
+  height: 60px !important;
+}
+.body__employee .card #edit-employee,
+.body__employee .card #delete-employee {
+  cursor: pointer;
+}
+.body__employee .card #edit-employee:hover {
+  color: orange;
+}
+.body__employee .card #delete-employee:hover {
+  color: orangered;
+}

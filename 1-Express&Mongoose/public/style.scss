@@ -209,4 +209,30 @@ main .card {
 // =================== Employee page styles =================
 .body__employee {
     background-color: #EEEEF1;
+
+    .card {
+        .card__avatar {
+            object-fit: fill;
+            display: block;
+            width: 60px;
+            height: 60px !important;
+            ;
+        }
+         #edit-employee,
+         #delete-employee{
+             cursor: pointer;
+         }
+        #edit-employee{
+            &:hover{
+                color: orange;
+            }
+        }
+        #delete-employee{
+            &:hover{
+                color: orangered;
+            }
+        }
+    }
+
+    
 }

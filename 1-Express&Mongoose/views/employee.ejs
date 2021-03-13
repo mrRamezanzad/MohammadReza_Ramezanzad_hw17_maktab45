@@ -21,10 +21,7 @@
     <div class="container text-capitalize">
         <div class="row justify-content-center align-items-center ">
 
-            <!-- filter component -->
-            <%- include("./partials/__filter") %>
-
-            <!-- add new card button -->
+           <!-- add new card button -->
             <div id="new-button" class="btn fs-1 text-right w-5" data-bs-toggle="modal"
                 data-bs-target="#more-info-modal">
                 &plus;
@@ -33,21 +30,47 @@
         </div>
         
         <!-- main section of page -->
-        <main class="row gx-sm-3 gx-md-5">
+        <main class="row justify-content-center gx-sm-3 gx-md-5">
 
             <!-- card rendering -->
-            <div class=" card w-100 d-flex justify-content-between mb-2 px-4 py-3">
-                ff
+            <div class=" card col-md-50  mb-2 px-4 py-3">
+                <div class="row align-items-center">
+                    
+                    <!-- avatar -->
+                    <div class="col-md-3 avatar "><img class="card__avatar d-block rounded rounded-circle" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQEZrATmgHOi5ls0YCCQBTkocia_atSw0X-Q&usqp=CAU" alt="avatar"></div>
+                    
+                    <!-- section  -->
+                    <div class="col-md-3">
+                        <!-- full name -->
+                        <p class="fw-bold">fullname:</p>
+                        
+                        <!-- birthday -->
+                        <p class="text-muted">birthday:</p>
+                    </div>
+                    
+                    <!-- section  -->
+                    <div class="col-md-3">
+                        <!-- gender -->
+                        <p class="fw-bold">gender:</p>
+
+                        <!-- company -->
+                        <p class="text-muted">company:</p>
+                    </div>
+                    
+                    <!-- edit section  -->
+                    <div class="col-md-3 d-flex justify-content-center">
+
+                            <!-- edit button -->
+                            <icon id="edit-employee" class="bi bi-pencil p-2 fs-3 border-end"></icon>
+
+                            <!-- delete button -->
+                            <icon id="delete-employee" class="bi bi-trash2 p-2 fs-3"></icon>
+
+                    </div>
+                </div>
             </div>
-            <div class=" card w-100 d-flex justify-content-between mb-2 px-4 py-3">
-                ff
-            </div>
-            <div class=" card w-100 d-flex justify-content-between mb-2 px-4 py-3">
-                ff
-            </div>
-            
-            
         </main>
+
         <!-- modal -->
         <%- include("./partials/__modal") %>             
     </div>
