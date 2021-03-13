@@ -154,7 +154,19 @@ main .card #delete-button:hover {
 .body__employee {
   background-color: #EEEEF1;
 }
-.body__employee .card .card__avatar {
+.body__employee .card {
+  overflow: hidden;
+}
+.body__employee .card__manager-mark {
+  width: 100px;
+  text-align: center;
+  height: auto;
+  color: white;
+  text-shadow: 0 2px 3px black;
+  background-color: slateblue;
+  transform: rotate(-45deg) translate(-28px, -7px);
+}
+.body__employee .card__avatar {
   object-fit: fill;
   display: block;
   width: 60px;

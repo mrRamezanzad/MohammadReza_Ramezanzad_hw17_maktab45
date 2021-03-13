@@ -31,14 +31,15 @@ router.get('/companies/', function (req, res) {
 
 // ============================ employee page ============================ 
 router.get('/employees/', function (req, res) {
-  let companies = Company.read({}, {
-    _id: 0
-  }, (err, companies) => {
-    if (companies) {
+
+  let employees = Employee.read({}, {}, (err, employees) => {
+
+    if (employees) {
       res.render('employee', {
-        companies,
+        employees,
       })
-      console.log(companies);
+      console.log(employees);
+
     } else {
       res.render('employee', {
         msg: "something went wrong"
@@ -49,14 +50,18 @@ router.get('/employees/', function (req, res) {
 
 // ========================= company's employees =====================
 router.get('/companies/:id/employees/', (req, res) => {
-  let companies = Company.read({}, {
-    _id: 0
-  }, (err, companies) => {
-    if (companies) {
+
+  let employees = Employee.read({
+
+    company: req.params.id
+  }, {}, (err, employees) => {
+
+    if (employees) {
       res.render('employee', {
-        companies,
+        employees,
       })
-      console.log(companies);
+      console.log(employees);
+
     } else {
       res.render('employee', {
         msg: "something went wrong"
