@@ -4,39 +4,21 @@ const express = require('express'),
   Company = require(path.join(__dirname, '../services/company')),
   Employee = require(path.join(__dirname, '../services/employee'))
 
-/* GET home page. */
+// ====================== home page =========================
 router.get('/', function (req, res) {
-
-
-  let companies = Company.read({}, {
-    _id: 0
-  }, (err, companies) => {
-    if (companies) {
-
-      res.render('../views/index', {
-        companies,
-        page: "home"
-      })
-      console.log(companies);
-    } else {
-      res.render('../views/index', {
-        msg: "something went wrong"
-      })
-    }
-  })
-
+  res.render('index')
+  // res.send("hello")
 })
 
-/* GET company page. */
+// ============================= company page =============================
 router.get('/companies/', function (req, res) {
-      // res.locals.message = "test message"
+  // res.locals.message = "test message"
   let companies = Company.read({}, {
     _id: 0
   }, (err, companies) => {
     if (companies) {
       res.render('../views/company', {
         companies,
-        page: "company",
       })
       console.log(companies);
     } else {
@@ -47,7 +29,7 @@ router.get('/companies/', function (req, res) {
   })
 })
 
-/* GET employee page. */
+// ============================ employee page ============================ 
 router.get('/employees/', function (req, res) {
   let companies = Company.read({}, {
     _id: 0
@@ -55,7 +37,6 @@ router.get('/employees/', function (req, res) {
     if (companies) {
       res.render('../views/employee', {
         companies,
-        page: "employee"
       })
       console.log(companies);
     } else {
@@ -64,6 +45,11 @@ router.get('/employees/', function (req, res) {
       })
     }
   })
+})
+
+// ========================= company's employees =====================
+router.get('/companies/:id/employees/', (req, res) => {
+  res.render('../views/company')
 })
 
 module.exports = router

@@ -1,11 +1,15 @@
 <!-- HTML header -->
-<%- include("./partials/header") %>
+<%- include("./partials/__header") %>
+
+<!-- navbar component -->
+<%- include('./partials/__navbar', {page: "employee"}) %> 
+
 
     <div class="container text-capitalize">
         <div class="row justify-content-center align-items-center ">
 
             <!-- filter component -->
-            <%- include("./partials/filter") %>
+            <%- include("./partials/__filter") %>
 
             <!-- add new card button -->
             <div id="new-button" class="btn fs-1 text-right w-5" data-bs-toggle="modal"
@@ -19,13 +23,11 @@
         <main class="row gx-sm-3 gx-md-5">
 
             <!-- card rendering -->
-            <% companies.forEach(company=> {%>
-             
-            <% }) %>
+           
 
         </main>
         <!-- modal -->
-        <%- include("./partials/modal") %>             
+        <%- include("./partials/__modal") %>             
     </div>
 
-<%- include("./partials/footer") %>
+<%- include("./partials/__footer") %>

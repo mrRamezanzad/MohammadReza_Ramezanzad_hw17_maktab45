@@ -18,6 +18,7 @@ const app = express()
 mongoose.connect("mongodb://localhost:27017/hw17", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  useCreateIndex: true,
 })
 
 
@@ -33,10 +34,14 @@ app.use(express.urlencoded({
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(flash())
-app.use(session({ cookie: { maxAge: 60000 }, 
-                  secret: 'woot',
-                  resave: false, 
-                  saveUninitialized: false}));
+app.use(session({
+  cookie: {
+    maxAge: 60000
+  },
+  secret: 'woot',
+  resave: false,
+  saveUninitialized: false
+}));
 
 // using controllers
 app.use('/', [indexRouter, companyRouter, employeeRouter])
@@ -55,6 +60,7 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500)
+  res.locals.page = ""
   res.render('404')
 })
 

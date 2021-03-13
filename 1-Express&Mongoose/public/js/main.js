@@ -5,7 +5,7 @@ let modalBody = $(".modal-body"),
 
 // ============================ Search section =======================
 
-// go to search-bar action
+// go to search-bar action focus effect
 $(document).on("keyup", function (e) {
     if (e.key === "/") {
         $("[type='search']").focus()
@@ -24,43 +24,14 @@ $("[type='search']").keyup(function (e) {
     // searchProducts(searchQuery)
 });
 
-// // search functionality
-// function searchProducts(searchQuery) {
-
-//     if (searchQuery === "") return renderCards(db)
-//     // console.log(db);
-
-//     // solution-1 simple search by includes function
-//     // let filteredProducts = db.filter(el => {
-//     //     return el["id"] == parseInt(searchQuery) || el["name"].includes(searchQuery) ||
-//     //         el["color"].includes(searchQuery) || el["size"] == parseInt(searchQuery) ||
-//     //         el["type"].includes(searchQuery) || el["id"] == parseInt(searchQuery) ||
-//     //         el["image"].includes(searchQuery)
-
-//     // })
-
-//     // solution-2 improved search by includes function
-//     let filteredProducts = db.filter(el => {
-//         let searchSource = ""
-//         // console.log(searchSource.concat(el["id"], el["name"], el["color"], el["size"], el["type"], el["id"], el["image"]).toLowerCase());
-//         return searchSource.concat(el["id"], el["name"], el["color"], el["size"], el["type"], el["id"], el["image"], el["price"]).toLowerCase().includes(searchQuery)
-
-//     })
-
-//     // solution-3  regex
-
-//     // console.log(filteredProducts);
-//     renderCards(filteredProducts)
-// }
-
 // ========================== hover effects ===========================
-// card hover shadow
+// card hover shadow effect
 $(document).on("mouseover mouseout", ".card", function () {
     // over
     $(this).toggleClass("shadow");
 });
 
-// // btn hover shadow 
+// // btn hover shadow effect
 $("body").on("mouseover mouseout", ".btn-more", function () {
     // over
     $(this).toggleClass("shadow");
@@ -75,7 +46,7 @@ $(document).on("click", "[role='delete-card']", function (e) {
         url: `/api/companies/${cardId}`,
         success: function (response) {
             console.log("success:", response);
-            //location.reload()
+            location.reload()
         },
         error: function (err) {
             console.log("error:", err);
@@ -164,12 +135,12 @@ function getInformations() {
     return inputs
 }
 
-// show more button
+// show more button click
 $(document).on("click", ".btn-more", function (e) {
     let cardId = $(this).attr("card-id")
     $.ajax({
         type: "GET",
-        url: `/api/companies/get/q=?id=${cardId}`,
+        url: `/api/companies/${cardId}`,
         success: function (response) {
             console.log("success:", response);
             showMoreInfo(response[0])
@@ -240,7 +211,7 @@ $(document).on("click", "#cancel-button", function (e) {
 
 })
 
-// save update click
+// save updates button click
 $(document).on("click", "#save-button", function (e) {
     // modal.hide()
     console.log("saveing proccess started");
