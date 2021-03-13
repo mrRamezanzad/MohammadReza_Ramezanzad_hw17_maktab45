@@ -1,6 +1,7 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const Employee = require('./employee');
 
-module.exports = mongoose.model("Company", mongoose.Schema({
+const companySchema = new mongoose.Schema({
     name: {
         type: String,
         unique: true,
@@ -26,4 +27,32 @@ module.exports = mongoose.model("Company", mongoose.Schema({
 
     }
 
-}))
+})
+
+// ================= adding neccesary hooks for deletion ===============
+companySchema.post('deleteOne', function (doc, next) {
+    console.log("====================im here post company deletion====================\n");
+    console.log("it is this ================>>", this._conditions._id);
+    Employee.remove({
+        company: this._conditions._id
+    }, (err) => {
+
+        // console.log("starting to remove employees of this company");
+        if (err) {
+
+            console.log(err);
+            return next(new Erro("there was an error during deletion of employees"))
+            
+        } else {
+
+            return next()
+        }
+
+    })
+})
+
+
+
+
+const Company = mongoose.model("Company", companySchema)
+module.exports = Company

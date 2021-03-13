@@ -35,10 +35,10 @@ router.get('/employees/', function (req, res) {
   let employees = Employee.read({}, {}, (err, employees) => {
 
     if (employees) {
+      // console.log(employees);
       res.render('employee', {
         employees,
       })
-      // console.log(employees);
 
     } else {
       res.render('employee', {

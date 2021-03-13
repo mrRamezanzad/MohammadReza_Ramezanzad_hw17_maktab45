@@ -62,7 +62,7 @@ module.exports = {
 
     // =============== update one employee =============== 
     updateOne: (match, updateInfo, callback) => {
-        
+
         // console.log(match, updateInfo);
         employeeModel.updateOne(
             match, updateInfo, {
@@ -84,7 +84,7 @@ module.exports = {
             })
     },
 
-// ============= delete employee =============
+    // ============= delete employee =============
     delete: (match, callback) => {
         employeeModel.deleteOne(match, (err, employee) => {
             if (err) console.log(err);

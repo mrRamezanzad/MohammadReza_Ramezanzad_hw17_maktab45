@@ -344,8 +344,8 @@ router.put("/api/employees/:id", (req, res) => {
             company: req.body.company
         }
     }
-    
     // console.log("============================i generated this info============================\n", employeeUpdateInfo);
+    // console.log("===============================\n", match, filter);
     Employee.updateOne({
         _id: req.params.id
     }, employeeUpdateInfo, (err, employee) => {
@@ -388,7 +388,7 @@ router.put("/api/employees/", (req, res) => {
             company: req.body.company
         }
     }
-    // console.log("============================i generated this info============================\n", employeeUpdateInfo);
+    // console.log("=================i generated this info=================\n", employeeUpdateInfo);
     Employee.update({
         _id: req.params.id
     }, employeeUpdateInfo, (err, employee) => {

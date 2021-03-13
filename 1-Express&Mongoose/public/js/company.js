@@ -78,7 +78,6 @@ $(document).on("click", "#create-button", function (e) {
         success: function (response) {
             if (response) {
                 console.log("success: ", response);
-                //location.reload()
                 alert("successfully created")
                 location.reload()
             }
@@ -87,7 +86,7 @@ $(document).on("click", "#create-button", function (e) {
             if (err) {
                 console.log("error: ", err);
                 alert("there was a problem with your data")
-                location.reload()
+                // location.reload()
             }
         }
     });
