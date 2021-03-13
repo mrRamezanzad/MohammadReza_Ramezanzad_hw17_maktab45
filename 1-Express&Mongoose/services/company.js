@@ -1,15 +1,22 @@
+// ================ importing required models ================
 let companyModel = require('../models/company')
+let employeeModel = require('../models/employee')
 
 module.exports = {
+
+    // ================ drop collection ================ 
     dropCollection: (model = companyModel) => {
         model.remove({}, (err, companies) => {
             if (err) console.log(err)
             return console.log(companies)
         })
     },
+
+    // ================ create company ================ 
     create: (companyInfo, callback) => {
         if (Array.isArray(companyInfo)) {
 
+            // ================ create multiple companies ================ 
             companyInfo.forEach(company => {
                 new companyModel({
                     name: company.name,
@@ -24,6 +31,8 @@ module.exports = {
                 })
             })
         } else {
+
+            // ================ create one company ================ 
             return new companyModel({
                 name: companyInfo.name,
                 cin: companyInfo.cin,
@@ -37,6 +46,8 @@ module.exports = {
             })
         }
     },
+
+    // ================ read multiple companies ================ 
     read: (match, filter, callback) => {
         filter = {
             ...filter,
@@ -48,6 +59,21 @@ module.exports = {
             callback(err, companies);
         })
     },
+
+    // ================ read one company ================ 
+    readOne: (match, filter, callback) => {
+        filter = {
+            ...filter,
+            _id: 1,
+            __v: 0
+        }
+        companyModel.findOne(match, filter, (err, companies) => {
+            if (err) console.log(err);
+            callback(err, companies);
+        })
+    },
+
+    // ================ update one company ================ 
     update: (match, updateInfo, callback) => {
         companyModel.findOneAndUpdate(
             match, updateInfo, {
@@ -57,6 +83,8 @@ module.exports = {
                 callback(err, company);
             })
     },
+
+    // ================ update all companies ================ 
     updateAll: (match, updateInfo, callback) => {
         companyModel.updateMany(
             match, updateInfo, {
@@ -66,6 +94,8 @@ module.exports = {
                 callback(err, companies);
             })
     },
+
+    // ================ delete ================ 
     delete: (match, callback) => {
         companyModel.deleteOne(match, (err, company) => {
             if (err) console.log(err);

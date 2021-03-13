@@ -1,8 +1,8 @@
 const express = require('express'),
-  router = express.Router()
+  router = express.Router(),
 
-// adding company services
-const Company = require('../services/company')
+  // importing company services
+  Company = require('../services/company')
 
 // crud services routes
 // Company.dropCollection()
@@ -61,10 +61,12 @@ const Company = require('../services/company')
 // })
 
 
-// ================= crud routes =================
+// ******************** crud routes ********************
 
-// ================= create 
+// ================= create =================
 router.post("/api/companies/", (req, res) => {
+
+  // ----------- filtering required informations to make new 
   let newCompanyInfo = {
     ...(req.body.name) && {
       name: req.body.name
@@ -86,6 +88,7 @@ router.post("/api/companies/", (req, res) => {
     }
   }
 
+  // -------- invoking service to create new
   Company.create([newCompanyInfo], (err, company) => {
     if (err) {
       res.status(400).json({
@@ -97,23 +100,29 @@ router.post("/api/companies/", (req, res) => {
   })
 })
 
-// ================= read
+// ================= read =================
 router.get("/api/companies/", (req, res) => {
 
+  // check for specific dates 
   let selectedRegister = new Date()
   selectedRegister.setFullYear(selectedRegister.getFullYear() - req.query.lt)
+
+  // make safe matches for search
   let match = {
+      ...(req.params.id) && {
+        _id: req.params.id
+      },
       ...(req.query.lt) && {
         registerDate: {
           $gte: selectedRegister
         },
       },
-      ...(req.query.id) && {
-        _id: req.query.id
-      }
     },
+
+    // check field filters
     filter = req.query.exc && {}
 
+  // invokeing search by parameters service
   Company.read(match, filter, (err, companies) => {
     if (err) {
       res.status(400).json({
@@ -125,24 +134,30 @@ router.get("/api/companies/", (req, res) => {
   })
 })
 
-// ================= get queries
+// ============ specific queries ============
 router.get("/api/companies/:id/", (req, res) => {
 
+  // check for specific dates 
   let selectedRegister = new Date()
   selectedRegister.setFullYear(selectedRegister.getFullYear() - req.query.lt)
+
+  // make safe matches for search
   let match = {
+      ...(req.params.id) && {
+        _id: req.params.id
+      },
       ...(req.query.lt) && {
         registerDate: {
           $gte: selectedRegister
-        },
+        }
       },
-      ...(req.query.id) && {
-        _id: req.params.id
-      }
     },
+
+    // check field filters
     filter = req.query.exc && {}
 
-  Company.read(match, filter, (err, company) => {
+  // invoke finding one item service
+  Company.readOne(match, filter, (err, company) => {
     if (err) {
       res.status(400).json({
         msg: "nothing found"
@@ -153,7 +168,7 @@ router.get("/api/companies/:id/", (req, res) => {
   })
 });
 
-// ================= update 
+// ================= update =================
 router.put("/api/companies/:id", (req, res) => {
 
   let companyUpdateInfo = {
@@ -203,7 +218,7 @@ router.put("/api/companies/:id", (req, res) => {
   }
 })
 
-// =================== delete
+// =================== delete ===================
 router.delete("/api/companies/:id", (req, res) => {
 
   Company.delete({

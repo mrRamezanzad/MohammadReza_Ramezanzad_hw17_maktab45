@@ -17,12 +17,12 @@ router.get('/companies/', function (req, res) {
     _id: 0
   }, (err, companies) => {
     if (companies) {
-      res.render('../views/company', {
+      res.render('company', {
         companies,
       })
       console.log(companies);
     } else {
-      res.render('../views/company', {
+      res.render('company', {
         msg: "something went wrong"
       })
     }
@@ -35,12 +35,12 @@ router.get('/employees/', function (req, res) {
     _id: 0
   }, (err, companies) => {
     if (companies) {
-      res.render('../views/employee', {
+      res.render('employee', {
         companies,
       })
       console.log(companies);
     } else {
-      res.render('../views/employee', {
+      res.render('employee', {
         msg: "something went wrong"
       })
     }
@@ -49,7 +49,20 @@ router.get('/employees/', function (req, res) {
 
 // ========================= company's employees =====================
 router.get('/companies/:id/employees/', (req, res) => {
-  res.render('../views/company')
+  let companies = Company.read({}, {
+    _id: 0
+  }, (err, companies) => {
+    if (companies) {
+      res.render('employee', {
+        companies,
+      })
+      console.log(companies);
+    } else {
+      res.render('employee', {
+        msg: "something went wrong"
+      })
+    }
+  })
 })
 
 module.exports = router

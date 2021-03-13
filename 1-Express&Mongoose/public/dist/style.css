@@ -150,3 +150,7 @@ main .card #delete-button:hover {
 .alert {
   z-index: 1080;
 }
+
+.body__employee {
+  background-color: #EEEEF1;
+}

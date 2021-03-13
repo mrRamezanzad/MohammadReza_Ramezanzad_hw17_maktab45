@@ -143,7 +143,7 @@ $(document).on("click", ".btn-more", function (e) {
         url: `/api/companies/${cardId}`,
         success: function (response) {
             console.log("success:", response);
-            showMoreInfo(response[0])
+            showMoreInfo(response)
         },
         error: function (err) {
             console.log("error:", err);
