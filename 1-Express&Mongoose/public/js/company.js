@@ -209,3 +209,13 @@ $(document).on("click", "#save-button", function (e) {
         }
     });
 })
+
+// =============== filtering results =================
+// apply click handler
+$("#filter__apply-button").on("click", function (e) {
+    e.preventDefault()
+    console.log("apply my filters==============>>", );
+    console.log("start:",$("[name='start-date']").val())
+    console.log("end:",$("[name='end-date']").val())
+
+})

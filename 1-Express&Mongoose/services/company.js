@@ -1,6 +1,7 @@
 // ================ importing required models ================
 let companyModel = require('../models/company')
 let employeeModel = require('../models/employee')
+const employee = require('./employee')
 
 module.exports = {
 
@@ -27,7 +28,7 @@ module.exports = {
                     telephone: company.telephone
                 }).save((err, company) => {
                     if (err) console.log(err.message)
-                    callback(err, company);
+                    return callback(err, company);
                 })
             })
         } else {
@@ -42,7 +43,7 @@ module.exports = {
                 telephone: companyInfo.telephone,
             }).save((err, company) => {
                 if (err) console.log(err.message)
-                callback(err, company);
+                return callback(err, company);
             })
         }
     },
@@ -56,7 +57,7 @@ module.exports = {
         }
         companyModel.find(match, filter, (err, companies) => {
             if (err) console.log(err);
-            callback(err, companies);
+            return callback(err, companies);
         })
     },
 
@@ -69,8 +70,55 @@ module.exports = {
         }
         companyModel.findOne(match, filter, (err, companies) => {
             if (err) console.log(err);
-            callback(err, companies);
+            return callback(err, companies);
         })
+    },
+
+    // ================ read specefic company's employees ================ 
+    readEmployees: (match, filter, callback) => {
+        filter = {
+            ...filter,
+            _id: 1,
+            __v: 0
+        }
+        companyModel.findOne(match, filter, (err, company) => {
+
+            if (err) return console.log(err);
+
+            if (company) {
+
+                employeeModel.find({
+                    company: company._id
+                }).populate('company').exec((err, employees) => {
+                    if (err) return callback(err, employees);
+                    return callback(err, employees)
+                })
+            } else {
+                return callback({
+                    msg: "nothing found"
+                }, [])
+            }
+        })
+    },
+
+    // ================ read specefic company's manager ================ 
+    readManager: (match, filter, callback) => {
+        filter = {
+            ...filter,
+            _id: 1,
+            __v: 0
+        }
+        companyModel.findOne(match, filter, (err, company) => {
+
+            console.log("im heree");
+            if (err) return console.log(err);
+            if(!company) return callback({msg: "nothing found"}, [])
+
+            employeeModel.find({company: company._id, manager: true}).populate('company').exec((err, employees) => {
+                    if (err) return callback(err, employees)
+                    return callback(err, employees)
+            })
+        }) 
     },
 
     // ================ update one company ================ 
@@ -80,7 +128,7 @@ module.exports = {
                 new: true
             }, (err, company) => {
                 if (err) console.log(err);
-                callback(err, company);
+                return callback(err, company);
             })
     },
 
@@ -91,7 +139,7 @@ module.exports = {
                 new: true
             }, (err, companies) => {
                 if (err) console.log(err);
-                callback(err, companies);
+                return callback(err, companies);
             })
     },
 
@@ -99,7 +147,7 @@ module.exports = {
     delete: (match, callback) => {
         companyModel.deleteOne(match, (err, company) => {
             if (err) console.log(err);
-            callback(err, company);
+            return callback(err, company);
         })
     }
 }
