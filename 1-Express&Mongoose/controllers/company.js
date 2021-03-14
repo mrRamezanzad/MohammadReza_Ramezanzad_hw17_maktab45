@@ -220,7 +220,6 @@ router.get("/api/companies/:nameOfCompany/manager", (req, res) => {
     
     if (manager.length) return res.json(manager)
     
-    console.log('==================== im here ===================\n', manager.length)
     return res.json({msg: "found nothing"})
 
   }) 

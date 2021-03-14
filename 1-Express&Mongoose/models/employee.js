@@ -48,49 +48,34 @@ employeeSchema.pre('save', function (next) {
     // console.log("===================== im in pre save here =====================");
     // console.log(this);
 
-    if (this.manager === true) {
+    if (this.manager !== true) return next()
 
-        Employee.find({
-            manager: true,
-            company: this.company
-        }, (err, manager) => {
-
-            if (manager.length)
-                return next(new Error("this company has a manager already"))
-
-            return next()
-        })
-    } else {
-
+    Employee.find({manager: true, company: this.company}, (err, manager) => {
+        
+        if (err) return next(err)
+        if (manager.length) return next(new Error("this company has a manager already"))
         return next()
-    }
+    })
 })
 
 employeeSchema.pre('updateOne', function (next) {
 
-    // console.log("===================== im in pre update here =====================");
-    // console.log("================= id =>>>>>>>", this)
-    // console.log(this._update.manager === "true");
+    if (this._update.manager !== "true") return next()
+    
+    Employee.findById({_id: this._conditions._id,}, (err, employee) => {
+        
+        if(err) return next(err)
+        Employee.find({company: employee.company, _id: {$ne: employee._id}, manager: true}, (err, manager) => {
 
-    if (this._update.manager === "true") {
-
-        Employee.find({
-            company: this._update.company,
-            manager: true,
-            _id: {
-                $ne: this._conditions._id
-            },
-        }, (err, manager) => {
+            if (err) return next(err)
+            if(manager.length) return next(new Error("duplicate item"))
+            next()
             
-            if (manager.length)
-                return next(new Error("this company already has a manager"))
-
-            return next()
         })
-    } else {
-
-        return next()
-    }
+        // if (.length === 0) return next()
+        // return next(new Error("this company already has a manager"))
+    })
+     
 })
 
 
