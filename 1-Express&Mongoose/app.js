@@ -1,56 +1,45 @@
-const createError = require('http-errors'),
-  express = require('express'),
-  path = require('path'),
-  cookieParser = require('cookie-parser'),
-  logger = require('morgan'),
-  mongoose = require('mongoose'),
-  flash = require('express-flash-messages'),
-  session = require('express-session')
+const createError     = require('http-errors'),
+      express         = require('express'),
+      path            = require('path'),
+      cookieParser    = require('cookie-parser'),
+      logger          = require('morgan'),
+      mongoose        = require('mongoose'),
+      flash           = require('express-flash-messages'),
+      session         = require('express-session')
 
 // adding controllers
-const indexRouter = require('./controllers/index'),
-  companyRouter = require('./controllers/company'),
-  employeeRouter = require('./controllers/employee')
+const indexRouter     = require('./controllers/index'),
+      companyRouter   = require('./controllers/company'),
+      employeeRouter  = require('./controllers/employee')
 
 const app = express()
 
 // database connection
 mongoose.connect("mongodb://localhost:27017/hw17", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true,
+  useCreateIndex     : true,
+  useNewUrlParser    : true,
+  useUnifiedTopology : true,
 })
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 
-app.use(logger('dev'))
-app.use(express.json())
-app.use(express.urlencoded({
-  extended: true
-}))
-app.use(cookieParser())
-app.use(express.static(path.join(__dirname, 'public')))
-app.use(flash())
-app.use(session({
-  cookie: {
-    maxAge: 60000
-  },
-  secret: 'woot',
-  resave: false,
-  saveUninitialized: false
-}));
+app.use([
+  logger('dev'),
+  express.json(),
+  express.urlencoded({extended: true}),
+  cookieParser(),
+  express.static(path.join(__dirname, 'public')),
+  flash(),
+  session({cookie: {maxAge: 60000},secret: 'woot',resave: false,saveUninitialized: false})
+])
 
 // using controllers
 app.use('/', [indexRouter, companyRouter, employeeRouter])
 
-
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  next(createError(404))
-})
+app.use(function (req, res, next) {next(createError(404))})
 
 // error handler
 app.use(function (err, req, res, next) {

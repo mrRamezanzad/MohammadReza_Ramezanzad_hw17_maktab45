@@ -22,12 +22,10 @@ $("[type='search']").keyup(function (e) {
 // ========================== hover effects ===========================
 // card hover shadow effect
 $(document).on("mouseover mouseout", ".card", function () {
-    // over
     $(this).toggleClass("shadow");
 });
 
 // // btn hover shadow effect
 $("body").on("mouseover mouseout", ".btn-more", function () {
-    // over
     $(this).toggleClass("shadow");
 })

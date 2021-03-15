@@ -60,7 +60,6 @@ const express = require('express'),
 // Company.read({}, {}, (err, company) => {
 // })
 
-
 // ******************** crud routes ********************
 
 // ================= create =================
@@ -174,7 +173,6 @@ router.get("/api/companies/:nameOfCompany/employees/", (req, res) => {
     
     if (employees.length) return res.json(employees)
     
-    console.log('==================== im here ===================\n', employees.length)
     return res.json({msg: "found nothing"})
 
   }) 
@@ -250,6 +248,5 @@ router.delete("/api/companies/:id/", (req, res) => {
     
   })
 })
-
 
 module.exports = router

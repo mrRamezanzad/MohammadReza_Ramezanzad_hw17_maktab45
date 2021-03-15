@@ -1,8 +1,9 @@
-const express = require('express'),
-    router = express.Router()
+const express   = require('express'),
+      router    = express.Router()
 
+const { response } = require('express')
 // adding employee services
-const Employee = require('../services/employee')
+const Employee  = require('../services/employee')
 
 // ============== crud services routes
 // Employee.dropCollection()
@@ -86,15 +87,9 @@ router.post("/api/employees/", (req, res) => {
         ...(req.body.lastName) && {lastName: req.body.lastName},
         ...(req.body.id) && {id: req.body.id},
         ...(req.body.gender) && {gender: req.body.gender},
-        ...(req.body.manager) && {
-            manager: req.body.manager
-        },
-        ...(req.body.birthday) && {
-            birthday: new Date(req.body.birthday)
-        },
-        ...(req.body.company) && {
-            company: req.body.company
-        }
+        ...(req.body.manager) && {manager: req.body.manager},
+        ...(req.body.birthday) && {birthday: new Date(req.body.birthday)},
+        ...(req.body.company) && {company: req.body.company}
     }
 
     // ========== getting informations functionally ============
@@ -111,13 +106,8 @@ router.post("/api/employees/", (req, res) => {
     // getInformations()
 
     Employee.create([newEmployeeInfo], (err, employee) => {
-        if (err) {
-            res.status(500).json({
-                msg: "something went wrong"
-            })
-        } else {
-            res.status(201).json(employee)
-        }
+        if (err) return res.status(500).json({msg: "something went wrong"})
+        return res.status(201).json(employee)
     })
 })
 
@@ -125,167 +115,98 @@ router.post("/api/employees/", (req, res) => {
 
 router.get("/api/employees/", (req, res) => {
 
-    let currentYear = new Date().getFullYear(),
-        match = {
-            ...(req.query.minAge && !req.query.maxAge) && {
-                birthday: {
-                    $lte: new Date(`${currentYear - req.query.minAge}`)
+    let currentYear = new Date().getFullYear()
+    let match = {
+        ...(req.query.minAge && !req.query.maxAge) && {
+            birthday: {$lte: new Date(`${currentYear - req.query.minAge}`)}},
+        ...(req.query.maxAge && !req.query.minAge) && {
+            birthday: {$gte: new Date(`${currentYear - req.query.maxAge}`)}},
+        ...(req.query.minAge && req.query.maxAge) && {birthday: {
+                $lte: new Date(`${currentYear - req.query.minAge}`),
+                $gte: new Date(`${currentYear - req.query.maxAge}`)
+            }},
+        ...(req.query.manager) && {manager: req.query.manager}}
+
+    let exc = req.query.exc && req.query.exc.split(",")
+    let filter = exc && {
+                ...(exc.includes("firstName") && {
+                    firstName: 0
+                }),
+                ...(exc.includes("lastName")) && {
+                    lastName: 0
+                },
+                ...(exc.includes("id")) && {
+                    id: 0
+                },
+                ...(exc.includes("gender")) && {
+                    gender: 0
+                },
+                ...(exc.includes("manager")) && {
+                    manager: 0
+                },
+                ...(exc.includes("birthday")) && {
+                    birthday: 0
                 }
-            },
-            ...(req.query.maxAge && !req.query.minAge) && {
-                birthday: {
-                    $gte: new Date(`${currentYear - req.query.maxAge}`)
-                }
-            },
-            ...(req.query.minAge && req.query.maxAge) && {
-                birthday: {
-                    $lte: new Date(`${currentYear - req.query.minAge}`),
-                    $gte: new Date(`${currentYear - req.query.maxAge}`)
-                }
-            },
-            ...(req.query.manager) && {
-                manager: req.query.manager
             }
-        },
-        exc = req.query.exc && req.query.exc.split(","),
-        filter = exc && {
-            ...(exc.includes("firstName") && {
-                firstName: 0
-            }),
-            ...(exc.includes("lastName")) && {
-                lastName: 0
-            },
-            ...(exc.includes("id")) && {
-                id: 0
-            },
-            ...(exc.includes("gender")) && {
-                gender: 0
-            },
-            ...(exc.includes("manager")) && {
-                manager: 0
-            },
-            ...(exc.includes("birthday")) && {
-                birthday: 0
-            }
-        }
 
     if (req.query.company) {
-        Company.read({
-            name: `${req.query.company}`
-        }, {}, (err, targetCompany) => {
 
-            if (err) {
+        Company.read({name: `${req.query.company}`}, {}, (err, targetCompany) => {
 
-                return res.status(500).json({
-                    msg: "something went wrong in getting a companies employees"
-                })
-            }
-            if (targetCompany.length) {
+            if (err) return res.status(500).json({msg: "something went wrong"})
 
-                Employee.read({
-                    company: targetCompany[0]._id
-                }, filter, (err, employees) => {
-                    if (err) {
-                        console.log(err);
-                        return res.status(500).json({
-                            msg: "something went wrong "
-                        })
-                    }
-                    // console.log(employees);
-                    return res.json(employees)
-                })
-            } else {
-                return res.json({
-                    msg: "found nothing"
-                })
-            }
+            if (!targetCompany) return res.status(404).json({msg: "found nothing"})
+
+            Employee.read({company: targetCompany[0]._id}, filter, (err, employees) => {
+                if (err) return res.status(500).json({msg: "something went wrong"})
+                return res.json(employees)
+            })
         })
     }
-    // console.log(match);
-    // console.log(filter.filter(el => el.trim()));
-    // console.log(currentYear);
+
     else {
         Employee.read(match, filter, (err, employees) => {
-            
-            // console.log("employeeeee", employees);
-            if (err) {
-                res.status(500).json({
-                    msg: "something went wrong in getting all employees"
-                })
-            } else {
-                res.json(employees)
-            }
+
+            if (err) return res.status(500).json({msg: "something went wrong in getting all employees"})
+            return res.json(employees)
         })
     }
 })
 
 router.get("/api/employees/:id", (req, res) => {
 
-    // console.log("i got the request here", req.params.id);
-    let currentYear = new Date().getFullYear(),
-        match = {
-            ...(req.params.id) && {
-                _id: req.params.id
-            },
+    let currentYear = new Date().getFullYear()
+    let  match = {
+            ...(req.params.id) && {_id: req.params.id},
             ...(req.query.minAge && !req.query.maxAge) && {
-                birthday: {
-                    $lte: new Date(`${currentYear - req.query.minAge}`)
-                }
-            },
+                birthday: {$lte: new Date(`${currentYear - req.query.minAge}`)}},
             ...(req.query.maxAge && !req.query.minAge) && {
-                birthday: {
-                    $gte: new Date(`${currentYear - req.query.maxAge}`)
-                }
-            },
+                birthday: {$gte: new Date(`${currentYear - req.query.maxAge}`)}},
             ...(req.query.minAge && req.query.maxAge) && {
                 birthday: {
                     $lte: new Date(`${currentYear - req.query.minAge}`),
                     $gte: new Date(`${currentYear - req.query.maxAge}`)
-                }
-            },
-            ...(req.query.manager) && {
-                manager: req.query.manager
-            }
-        },
-        exc = req.query.exc && req.query.exc.split(","),
-        filter = exc && {
-            ...(exc.includes("firstName") && {
-                firstName: 0
-            }),
-            ...(exc.includes("lastName")) && {
-                lastName: 0
-            },
-            ...(exc.includes("id")) && {
-                id: 0
-            },
-            ...(exc.includes("gender")) && {
-                gender: 0
-            },
-            ...(exc.includes("manager")) && {
-                manager: 0
-            },
-            ...(exc.includes("birthday")) && {
-                birthday: 0
-            }
+                }},
+            ...(req.query.manager) && {manager: req.query.manager}
+        }
+       let exc = req.query.exc && req.query.exc.split(",")
+       let filter = exc && {
+            ...(exc.includes("firstName") && {firstName: 0}),
+            ...(exc.includes("lastName")) && {lastName: 0},
+            ...(exc.includes("id")) && {id: 0},
+            ...(exc.includes("gender")) && {gender: 0},
+            ...(exc.includes("manager")) && {manager: 0},
+            ...(exc.includes("birthday")) && {birthday: 0}
         }
 
     if (req.query.company) {
 
-        Company.read({
-            name: req.query.company
-        }, {}, (err, company) => {
-            match = {
-                ...match,
-                company: company[0]._id
-            }
+        Company.read({name: req.query.company}, {}, (err, company) => {
+            match = {...match,company: company[0]._id}
+
             Employee.read(match, filter, (err, employee) => {
-                if (err) {
-                    res.status(500).json({
-                        msg: "something went wrong"
-                    })
-                } else {
-                    res.json(employee)
-                }
+                if (err) return res.status(500).json({msg: "something went wrong"})
+                return res.json(employee)
             })
         })
 
@@ -293,16 +214,8 @@ router.get("/api/employees/:id", (req, res) => {
 
         Employee.read(match, filter, (err, employee) => {
 
-            // console.log(match, filter);
-            if (err) {
-                console.log(err);
-                res.status(500).json({
-                    msg: "something went wrong"
-                })
-            } else {
-                // console.log(employee);
-                res.json(employee)
-            }
+            if (err) return res.status(500).json({msg: "something went wrong"})
+            return res.json(employee)
         })
     }
 })
@@ -310,44 +223,20 @@ router.get("/api/employees/:id", (req, res) => {
 // ================= update one
 router.put("/api/employees/:id", (req, res) => {
 
-    // console.log("im here dude", req.params.id);
-    // console.log("============== req.body ============\n", req.body);
-
     let employeeUpdateInfo = {
-        ...(req.body.firstName) && {
-            firstName: req.body.firstName
-        },
-        ...(req.body.lastName) && {
-            lastName: req.body.lastName
-        },
-        ...(req.body.id) && {
-            id: req.body.id
-        },
-        ...(req.body.gender) && {
-            gender: req.body.gender
-        },
-        ...(req.body.manager) && {
-            manager: req.body.manager
-        },
-        ...(req.body.birthday) && {
-            birthday: new Date(req.body.birthday)
-        },
-        ...(req.body.company) && {
-            company: req.body.company
-        }
+        ...(req.body.firstName) && {firstName: req.body.firstName},
+        ...(req.body.lastName) && {lastName: req.body.lastName},
+        ...(req.body.id) && {id: req.body.id},
+        ...(req.body.gender) && {gender: req.body.gender},
+        ...(req.body.manager) && {manager: req.body.manager},
+        ...(req.body.birthday) && {birthday: new Date(req.body.birthday)},
+        ...(req.body.company) && {company: req.body.company}
     }
-    // console.log("============================i generated this info============================\n", employeeUpdateInfo);
-    // console.log("===============================\n", match, filter);
-    Employee.updateOne({
-        _id: req.params.id
-    }, employeeUpdateInfo, (err, employee) => {
-        if (err) {
-            res.status(500).json({
-                msg: "something went wrong"
-            })
-        } else {
-            res.json(employee);
-        }
+
+    Employee.updateOne({_id: req.params.id}, employeeUpdateInfo, (err, employee) => {
+        if (err) return res.status(500).json({msg: "something went wrong"})
+        return res.json(employee);
+        
     })
 })
 
@@ -381,6 +270,5 @@ router.delete("/api/employees/:id", (req, res) => {
         
     })
 })
-
 
 module.exports = router

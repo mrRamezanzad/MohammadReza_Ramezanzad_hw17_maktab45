@@ -1,27 +1,24 @@
-let modalBody = $(".modal-body"),
-    modalFooter = $(".modal-footer"),
-    modal = new bootstrap.Modal(document.getElementById('more-info-modal')),
-    msgAlert = new bootstrap.Alert(document.getElementById('myAlert'))
+let modalBody       = $(".modal-body"),
+    modalFooter     = $(".modal-footer"),
+    modal           = new bootstrap.Modal(document.getElementById('more-info-modal')),
+    msgAlert        = new bootstrap.Alert(document.getElementById('myAlert'))
 
 
 // ======================= Delete button ============================
 $(document).on("click", "[role='delete-card']", function (e) {
     let cardId = String($(this).attr('card-id'))
-    console.log(cardId);
+
     $.ajax({
         type: "DELETE",
         url: `/api/companies/${cardId}`,
         success: function (response) {
-            console.log("success:", response);
+            console.log("success:", response)
+            alert("deleted successfully")
             location.reload()
         },
-        error: function (err) {
-            console.log("error:", err);
-            alert(err)
-        }
+        error: function (err) {console.log("error:", err);alert(err)}
     })
 })
-
 
 // ============================ Modal Section ============================
 $(document).on("click", "#new-button", function (e) {
@@ -83,11 +80,8 @@ $(document).on("click", "#create-button", function (e) {
             }
         },
         error: function (err) {
-            if (err) {
                 console.log("error: ", err);
                 alert("there was a problem with your data")
-                // location.reload()
-            }
         }
     });
 })
@@ -113,11 +107,11 @@ $(document).on("click", ".btn-more", function (e) {
         type: "GET",
         url: `/api/companies/${cardId}`,
         success: function (response) {
-            console.log("success:", response);
+            // console.log("success:", response);
             showMoreInfo(response)
         },
         error: function (err) {
-            console.log("error:", err);
+            // console.log("error:", err);
             alert(err)
         }
     });
@@ -166,6 +160,7 @@ function showMoreInfo(data) {
 
 // update button click
 $(document).on("click", "#update-button", function (e) {
+    
     $("#update-button").attr("hidden", "true")
     $("#save-button").removeAttr("hidden")
     $("#cancel-button").removeAttr("hidden")
@@ -175,6 +170,7 @@ $(document).on("click", "#update-button", function (e) {
 
 // cancel button click
 $(document).on("click", "#cancel-button", function (e) {
+
     $("#update-button").removeAttr("hidden", "hidden")
     $("#save-button").attr("hidden", "hidden")
     $("#cancel-button").attr("hidden", "hidden")
@@ -184,10 +180,9 @@ $(document).on("click", "#cancel-button", function (e) {
 
 // save updates button click
 $(document).on("click", "#save-button", function (e) {
-    // modal.hide()
-    console.log("saveing proccess started");
+
     let newInformation = getInformations(),
-        cardId = $(this).attr("card-id")
+        cardId         = $(this).attr("card-id")
 
     $.ajax({
         type: "put",
@@ -202,20 +197,8 @@ $(document).on("click", "#save-button", function (e) {
             }
         },
         error: function (err) {
-            if (err) {
                 console.log("error: ", err);
                 alert("there was a problem with your data")
-            }
         }
     });
-})
-
-// =============== filtering results =================
-// apply click handler
-$("#filter__apply-button").on("click", function (e) {
-    e.preventDefault()
-    console.log("apply my filters==============>>", );
-    console.log("start:",$("[name='start-date']").val())
-    console.log("end:",$("[name='end-date']").val())
-
 })

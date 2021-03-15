@@ -1,73 +1,55 @@
-const express = require('express'),
-  router = express.Router(),
-  path = require('path'),
-  Company = require(path.join(__dirname, '../services/company')),
-  Employee = require(path.join(__dirname, '../services/employee'))
+const express   = require('express'),
+      router    = express.Router(),
+      path      = require('path'),
+      Company   = require(path.join(__dirname, '../services/company')),
+      Employee  = require(path.join(__dirname, '../services/employee'))
 
 // ====================== home page =========================
-router.get('/', function (req, res) {
-  res.render('index')
-  // res.send("hello")
-})
-
-// ============================= company page =============================
-router.get('/companies/', function (req, res) {
-  // res.locals.message = "test message"
-  let companies = Company.read({}, {
-    _id: 0
-  }, (err, companies) => {
-    if (companies) {
-      res.render('company', {
-        companies,
-      })
-      // console.log(companies);
-    } else {
-      res.render('company', {
-        msg: "something went wrong"
-      })
-    }
-  })
-})
+router.get('/', function (req, res) {return res.render('index')})
 
 // ============================ employee page ============================ 
 router.get('/employees/', function (req, res) {
-
-  let employees = Employee.read({}, {}, (err, employees) => {
-
-    if (employees) {
-      // console.log(employees);
-      res.render('employee', {
-        employees,
-      })
-
-    } else {
-      res.render('employee', {
-        msg: "something went wrong"
-      })
-    }
+  
+  Employee.read({}, {}, (err, employees) => {
+    
+    if (err) return res.render('employee', {msg: "something went wrong", err})
+    return res.render('employee', {employees,})
   })
 })
 
 // ========================= company's employees =====================
 router.get('/companies/:id/employees/', (req, res) => {
-
-  let employees = Employee.read({
-
-    company: req.params.id
-  }, {}, (err, employees) => {
-
-    if (employees) {
-      res.render('employee', {
-        employees,
-      })
-      // console.log(employees);
-
-    } else {
-      res.render('employee', {
-        msg: "something went wrong"
-      })
-    }
+  
+  Employee.read({company: req.params.id}, {}, (err, employees) => {
+ 
+    if (err)  return res.render('employee', {msg: "something went wrong"})
+    return res.render('employee', {employees,})
   })
 })
+
+// ============================= company page =============================
+router.get('/companies/', function (req, res) {
+
+  if (req.query.startDate && req.query.endDate){
+    
+    Company.read({registerDate: {$gt: req.query.startDate, $lt: req.query.endDate}}, {}, (err, companies) => {
+      
+      if(err) return res.status(500).render('company', {companies: {}})
+      return res.render('company', {companies})
+      
+    })
+
+  } else {
+    
+    Company.read({}, {_id: 0}, (err, companies) => {
+      
+      if (err) return res.render('company', {msg: "something went wrong", err})
+      return res.render('company', {companies,err})
+    })
+  }
+})
+  
+// ============================ COMPANY'S THAT ARE REGISTERED DURING SELECTED DATES ===============================
+router.get('/compnaies/')
 
 module.exports = router

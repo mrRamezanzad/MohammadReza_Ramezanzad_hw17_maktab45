@@ -1,7 +1,7 @@
-let modalBody = $(".modal-body"),
-    modalFooter = $(".modal-footer"),
-    modal = new bootstrap.Modal(document.getElementById('more-info-modal')),
-    msgAlert = new bootstrap.Alert(document.getElementById('myAlert'))
+let modalBody    = $(".modal-body"),
+    modalFooter  = $(".modal-footer"),
+    modal        = new bootstrap.Modal(document.getElementById('more-info-modal')),
+    msgAlert     = new bootstrap.Alert(document.getElementById('myAlert'))
 
 // delete card button click and ajax
 $(".delete-employee").on("click", function (e) {
@@ -12,6 +12,7 @@ $(".delete-employee").on("click", function (e) {
         success: function (response) {
             if (response) {
                 console.log("SUCCESS MESSAGE===>", response);
+                alert("successfully deleted")
                 location.reload()
 
             }
@@ -44,7 +45,6 @@ $('.edit-employee').on("click", function (e) {
                     // if (err) console.log("ERROR MESSAGE===>", err);
                     alert("there was a problem with your request")
                     location.reload()
-
                 }
             });
         },
@@ -52,7 +52,6 @@ $('.edit-employee').on("click", function (e) {
             if (err) console.log("ERROR MESSAGE===>", err);
             alert("there was a problem with your request")
             location.reload()
-
         }
     })
 })
@@ -110,12 +109,10 @@ function showEditModal(employee, companies) {
     `)
 }
 
-
 // save employee button click  
 $(document).on("click", "#save-employee", function (e) {
     e.preventDefault()
     let newEmployeeInfo = getEditedInformation()
-    // console.log(newEmployeeInfo);
 
     // sendign new data to api
     $.ajax({
@@ -135,10 +132,9 @@ $(document).on("click", "#save-employee", function (e) {
             alert("there was a problem with your data")
             location.reload()
 
-        }
+        }           
     });
 })
-
 
 function getEditedInformation() {
     return {
@@ -148,12 +144,10 @@ function getEditedInformation() {
         manager: $("[name='manager']").val(),
         birthday: new Date($("[name='birthday']").val()),
         company: $("[name='company']").val()
-
     }
 }
 
 // ================== show new model create button click ==================
-
 // create new button click
 $('#new-button').on("click", function (e) {
 
@@ -168,9 +162,6 @@ $('#new-button').on("click", function (e) {
             if (err) console.log("ERROR MESSAGE===>", err);
             alert("there was a problem with your request")
             location.reload()
-
-
-
         }
     });
 })

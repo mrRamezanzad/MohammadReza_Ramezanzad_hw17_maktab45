@@ -41,8 +41,6 @@ const mongoose  = require('mongoose'),
 
 })
 
-
-
 // ============== check hooks for employee model ============== 
 employeeSchema.pre('save', function (next) {
 
@@ -72,7 +70,6 @@ employeeSchema.pre('updateOne', function (next) {
         })
     })
 })
-
 
 const Employee = mongoose.model("Employee", employeeSchema)
 module.exports = Employee

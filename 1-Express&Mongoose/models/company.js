@@ -26,7 +26,6 @@ const companySchema = new mongoose.Schema({
         type: String,
 
     }
-
 })
 
 // ================= adding neccesary hooks for deletion ===============
@@ -47,12 +46,8 @@ companySchema.post('deleteOne', function (doc, next) {
 
             return next()
         }
-
     })
 })
-
-
-
 
 const Company = mongoose.model("Company", companySchema)
 module.exports = Company
