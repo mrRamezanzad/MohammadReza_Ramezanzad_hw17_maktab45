@@ -82,18 +82,10 @@ const Employee = require('../services/employee')
 // ================= create 
 router.post("/api/employees/", (req, res) => {
     let newEmployeeInfo = {
-        ...(req.body.firstName) && {
-            firstName: req.body.firstName
-        },
-        ...(req.body.lastName) && {
-            lastName: req.body.lastName
-        },
-        ...(req.body.id) && {
-            id: req.body.id
-        },
-        ...(req.body.gender) && {
-            gender: req.body.gender
-        },
+        ...(req.body.firstName) && {firstName: req.body.firstName},
+        ...(req.body.lastName) && {lastName: req.body.lastName},
+        ...(req.body.id) && {id: req.body.id},
+        ...(req.body.gender) && {gender: req.body.gender},
         ...(req.body.manager) && {
             manager: req.body.manager
         },
@@ -362,59 +354,31 @@ router.put("/api/employees/:id", (req, res) => {
 // ================= update all
 router.put("/api/employees/", (req, res) => {
 
-    // console.log("im here dude", req.params.id);
-    // console.log("============== req.body ============\n", req.body);
-
     let employeeUpdateInfo = {
-        ...(req.body.firstName) && {
-            firstName: req.body.firstName
-        },
-        ...(req.body.lastName) && {
-            lastName: req.body.lastName
-        },
-        ...(req.body.id) && {
-            id: req.body.id
-        },
-        ...(req.body.gender) && {
-            gender: req.body.gender
-        },
-        ...(req.body.manager) && {
-            manager: req.body.manager
-        },
-        ...(req.body.birthday) && {
-            birthday: new Date(req.body.birthday)
-        },
-        ...(req.body.company) && {
-            company: req.body.company
-        }
+        ...(req.body.firstName) && {firstName: req.body.firstName},
+        ...(req.body.lastName) && {lastName: req.body.lastName},
+        ...(req.body.id) && {id: req.body.id},
+        ...(req.body.gender) && {gender: req.body.gender},
+        ...(req.body.manager) && {manager: req.body.manager},
+        ...(req.body.birthday) && {birthday: new Date(req.body.birthday)},
+        ...(req.body.company) && {company: req.body.company}
     }
-    // console.log("=================i generated this info=================\n", employeeUpdateInfo);
-    Employee.update({
-        _id: req.params.id
-    }, employeeUpdateInfo, (err, employee) => {
-        if (err) {
-            res.status(500).json({
-                msg: "something went wrong"
-            })
-        } else {
-            res.json(employee);
-        }
+
+    Employee.update({_id: req.params.id}, employeeUpdateInfo, (err, employee) => {
+
+        if (err) return res.status(500).json({msg: "something went wrong"})
+        return res.json(employee)
     })
 })
 
 // =================== delete
 router.delete("/api/employees/:id", (req, res) => {
 
-    Employee.delete({
-        _id: req.params.id
-    }, (err, response) => {
-        if (err) {
-            res.status(500).json({
-                msg: "something went wrong"
-            })
-        } else {
-            res.json(response)
-        }
+    Employee.delete({_id: req.params.id}, (err, response) => {
+
+        if (err) return res.status(500).json({msg: "something went wrong"})
+        return res.json(response)
+        
     })
 })
 

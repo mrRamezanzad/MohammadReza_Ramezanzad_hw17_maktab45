@@ -1,42 +1,43 @@
-const mongoose = require('mongoose'),
-    Company = require('./company')
+const mongoose  = require('mongoose'),
+      Company   = require('./company'),
 
-const employeeSchema = new mongoose.Schema({
-    firstName: {
-        type: String,
-        // minlength: 3,
-        // maxlength: 25,
-    },
-    lastName: {
-        type: String,
-        // minlength: 3,
-        // maxlength: 25,
-        // required: true,
-    },
-    id: {
-        type: String,
-        // minlength: 10,
-        // maxlength: 10,
-        // required: true,
-    },
-    gender: {
-        type: String,
-        enum: ["female", "male"],
-        // required: true,
-    },
-    manager: {
-        type: Boolean,
-        // required: true,
-    },
-    birthday: {
-        type: Date,
-        // required: true,
-    },
-    company: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Company",
-        required: true,
-    },
+     employeeSchema = new mongoose.Schema({
+        firstName: {
+            type: String,
+            // minlength: 3,
+            // maxlength: 25,
+        },
+        lastName: {
+            type: String,
+            // minlength: 3,
+            // maxlength: 25,
+            // required: true,
+        },
+        id: {
+            type: String,
+            // minlength: 10,
+            // maxlength: 10,
+            // required: true,
+            unique: true,
+        },
+        gender: {
+            type: String,
+            enum: ["female", "male"],
+            // required: true,
+        },
+        manager: {
+            type: Boolean,
+            // required: true,
+        },
+        birthday: {
+            type: Date,
+            // required: true,
+        },
+        company: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Company",
+            required: true,
+        },
 
 })
 
@@ -45,13 +46,10 @@ const employeeSchema = new mongoose.Schema({
 // ============== check hooks for employee model ============== 
 employeeSchema.pre('save', function (next) {
 
-    // console.log("===================== im in pre save here =====================");
-    // console.log(this);
-
     if (this.manager !== true) return next()
 
     Employee.find({manager: true, company: this.company}, (err, manager) => {
-        
+
         if (err) return next(err)
         if (manager.length) return next(new Error("this company has a manager already"))
         return next()
@@ -69,13 +67,10 @@ employeeSchema.pre('updateOne', function (next) {
 
             if (err) return next(err)
             if(manager.length) return next(new Error("duplicate item"))
-            next()
+            return next()
             
         })
-        // if (.length === 0) return next()
-        // return next(new Error("this company already has a manager"))
     })
-     
 })
 
 
